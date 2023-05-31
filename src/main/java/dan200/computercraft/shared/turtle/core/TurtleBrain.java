@@ -18,13 +18,13 @@ import dan200.computercraft.shared.computer.core.ServerComputer;
 import dan200.computercraft.shared.turtle.blocks.TileTurtle;
 import dan200.computercraft.shared.util.*;
 import net.minecraft.block.Block;
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.BlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.MoverType;
 import net.minecraft.inventory.IInventory;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.util.Direction;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -110,7 +110,7 @@ public class TurtleBrain implements ITurtleAccess
 
     private Map<TurtleSide, ITurtleUpgrade> m_upgrades;
     private Map<TurtleSide, IPeripheral> m_peripherals;
-    private Map<TurtleSide, NBTTagCompound> m_upgradeNBTData;
+    private Map<TurtleSide, CompoundNBT> m_upgradeNBTData;
 
     private int m_selectedSlot;
     private int m_fuelLevel;
@@ -118,7 +118,7 @@ public class TurtleBrain implements ITurtleAccess
     private ResourceLocation m_overlay;
 
     private int m_instanceID;
-    private EnumFacing m_direction;
+    private Direction m_direction;
     private TurtleAnimation m_animation;
     private int m_animationProgress;
     private int m_lastAnimationProgress;
@@ -140,7 +140,7 @@ public class TurtleBrain implements ITurtleAccess
         m_overlay = null;
 
         m_instanceID = -1;
-        m_direction = EnumFacing.NORTH;
+        m_direction = Direction.NORTH;
         m_animation = TurtleAnimation.None;
         m_animationProgress = 0;
         m_lastAnimationProgress = 0;
@@ -201,10 +201,10 @@ public class TurtleBrain implements ITurtleAccess
         }
     }
 
-    public void readFromNBT( NBTTagCompound nbttagcompound )
+    public void readFromNBT( CompoundNBT nbttagcompound )
     {
         // Read state
-        m_direction = EnumFacing.getFront( nbttagcompound.getInteger( "dir" ) );
+        m_direction = Direction.getFront( nbttagcompound.getInteger( "dir" ) );
         m_selectedSlot = nbttagcompound.getInteger( "selectedSlot" );
         if( nbttagcompound.hasKey( "fuelLevel" ) )
         {
@@ -295,7 +295,7 @@ public class TurtleBrain implements ITurtleAccess
         }
     }
 
-    public NBTTagCompound writeToNBT( NBTTagCompound nbttagcompound )
+    public CompoundNBT writeToNBT( CompoundNBT nbttagcompound )
     {
         // Write state
         nbttagcompound.setInteger( "dir", m_direction.getIndex() );
@@ -349,7 +349,7 @@ public class TurtleBrain implements ITurtleAccess
         return null;
     }
 
-    public void writeDescription( NBTTagCompound nbttagcompound )
+    public void writeDescription( CompoundNBT nbttagcompound )
     {
         // Upgrades
         String leftUpgradeID = getUpgradeID( getUpgrade( TurtleSide.Left ) );
@@ -397,7 +397,7 @@ public class TurtleBrain implements ITurtleAccess
         nbttagcompound.setInteger( "fuelLevel", m_fuelLevel );
     }
 
-    public void readDescription( NBTTagCompound nbttagcompound )
+    public void readDescription( CompoundNBT nbttagcompound )
     {
         // Upgrades
         if( nbttagcompound.hasKey( "leftUpgrade" ) )
@@ -458,7 +458,7 @@ public class TurtleBrain implements ITurtleAccess
             m_lastAnimationProgress = 0;
         }
 
-        m_direction = EnumFacing.getFront( nbttagcompound.getInteger( "direction" ) );
+        m_direction = Direction.getFront( nbttagcompound.getInteger( "direction" ) );
         m_fuelLevel = nbttagcompound.getInteger( "fuelLevel" );
     }
 
@@ -589,17 +589,17 @@ public class TurtleBrain implements ITurtleAccess
 
     @Nonnull
     @Override
-    public EnumFacing getDirection()
+    public Direction getDirection()
     {
         return m_direction;
     }
 
     @Override
-    public void setDirection( @Nonnull EnumFacing dir )
+    public void setDirection( @Nonnull Direction dir )
     {
-        if( dir.getAxis() == EnumFacing.Axis.Y )
+        if( dir.getAxis() == Direction.Axis.Y )
         {
-            dir = EnumFacing.NORTH;
+            dir = Direction.NORTH;
         }
         m_direction = dir;
         m_owner.updateOutput();
@@ -879,11 +879,11 @@ public class TurtleBrain implements ITurtleAccess
 
     @Nonnull
     @Override
-    public NBTTagCompound getUpgradeNBTData( TurtleSide side )
+    public CompoundNBT getUpgradeNBTData( TurtleSide side )
     {
         if( !m_upgradeNBTData.containsKey( side ) )
         {
-            m_upgradeNBTData.put( side, new NBTTagCompound() );
+            m_upgradeNBTData.put( side, new CompoundNBT() );
         }
         return m_upgradeNBTData.get( side );
     }
@@ -894,7 +894,7 @@ public class TurtleBrain implements ITurtleAccess
         m_owner.updateBlock();
     }
 
-    public boolean saveBlockChange( BlockPos coordinates, IBlockState previousState )
+    public boolean saveBlockChange( BlockPos coordinates, BlockState previousState )
     {
         // Overriden by CCEdu
         return false;
@@ -910,7 +910,7 @@ public class TurtleBrain implements ITurtleAccess
             case MoveDown:
             {
                 // Get direction
-                EnumFacing dir;
+                Direction dir;
                 switch( m_animation )
                 {
                     case MoveForward:
@@ -926,12 +926,12 @@ public class TurtleBrain implements ITurtleAccess
                     }
                     case MoveUp:
                     {
-                        dir = EnumFacing.UP;
+                        dir = Direction.UP;
                         break;
                     }
                     case MoveDown:
                     {
-                        dir = EnumFacing.DOWN;
+                        dir = Direction.DOWN;
                         break;
                     }
                 }
@@ -1089,7 +1089,7 @@ public class TurtleBrain implements ITurtleAccess
                     m_animation == TurtleAnimation.MoveDown )
                 {
                     BlockPos pos = getPosition();
-                    EnumFacing moveDir;
+                    Direction moveDir;
                     switch( m_animation )
                     {
                         case MoveForward:
@@ -1105,12 +1105,12 @@ public class TurtleBrain implements ITurtleAccess
                         }
                         case MoveUp:
                         {
-                            moveDir = EnumFacing.UP;
+                            moveDir = Direction.UP;
                             break;
                         }
                         case MoveDown:
                         {
-                            moveDir = EnumFacing.DOWN;
+                            moveDir = Direction.DOWN;
                             break;
                         }
                     }

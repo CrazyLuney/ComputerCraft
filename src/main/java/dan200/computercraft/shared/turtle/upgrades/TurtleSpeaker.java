@@ -13,11 +13,11 @@ import dan200.computercraft.shared.peripheral.PeripheralType;
 import dan200.computercraft.shared.peripheral.common.PeripheralItemFactory;
 import dan200.computercraft.shared.peripheral.speaker.SpeakerPeripheral;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.block.model.IBakedModel;
-import net.minecraft.client.renderer.block.model.ModelManager;
-import net.minecraft.client.renderer.block.model.ModelResourceLocation;
+import net.minecraft.client.renderer.model.IBakedModel;
+import net.minecraft.client.renderer.model.ModelManager;
+import net.minecraft.client.renderer.model.ModelResourceLocation;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.util.Direction;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -129,7 +129,7 @@ public class TurtleSpeaker implements ITurtleUpgrade
 
     @Nonnull
     @Override
-    public TurtleCommandResult useTool( @Nonnull ITurtleAccess turtleAccess, @Nonnull TurtleSide turtleSide, @Nonnull TurtleVerb verb, @Nonnull EnumFacing direction )
+    public TurtleCommandResult useTool( @Nonnull ITurtleAccess turtleAccess, @Nonnull TurtleSide turtleSide, @Nonnull TurtleVerb verb, @Nonnull Direction direction )
     {
         return TurtleCommandResult.failure();
     }

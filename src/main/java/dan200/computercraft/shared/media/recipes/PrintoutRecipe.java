@@ -7,8 +7,8 @@
 package dan200.computercraft.shared.media.recipes;
 
 import dan200.computercraft.shared.media.items.ItemPrintout;
-import net.minecraft.init.Items;
-import net.minecraft.inventory.InventoryCrafting;
+import net.minecraft.item.Items;
+import net.minecraft.inventory.CraftingInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
@@ -45,14 +45,14 @@ public class PrintoutRecipe extends IForgeRegistryEntry.Impl<IRecipe> implements
     }
 
     @Override
-    public boolean matches( @Nonnull InventoryCrafting _inventory, @Nonnull World world )
+    public boolean matches( @Nonnull CraftingInventory _inventory, @Nonnull World world )
     {
         return !getCraftingResult( _inventory ).isEmpty();
     }
 
     @Nonnull
     @Override
-    public ItemStack getCraftingResult( @Nonnull InventoryCrafting inventory )
+    public ItemStack getCraftingResult( @Nonnull CraftingInventory inventory )
     {
         // See if we match the recipe, and extract the input disk ID and dye colour
         int numPages = 0;
@@ -161,7 +161,7 @@ public class PrintoutRecipe extends IForgeRegistryEntry.Impl<IRecipe> implements
 
     @Nonnull
     @Override
-    public NonNullList<ItemStack> getRemainingItems( @Nonnull InventoryCrafting inventoryCrafting )
+    public NonNullList<ItemStack> getRemainingItems( @Nonnull CraftingInventory inventoryCrafting )
     {
         NonNullList<ItemStack> results = NonNullList.withSize( inventoryCrafting.getSizeInventory(), ItemStack.EMPTY );
         for( int i = 0; i < results.size(); ++i )

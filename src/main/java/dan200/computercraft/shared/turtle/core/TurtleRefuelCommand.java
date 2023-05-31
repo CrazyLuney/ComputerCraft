@@ -12,7 +12,7 @@ import dan200.computercraft.api.turtle.TurtleAnimation;
 import dan200.computercraft.api.turtle.TurtleCommandResult;
 import dan200.computercraft.shared.util.InventoryUtil;
 import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.TileEntityFurnace;
+import net.minecraft.tileentity.FurnaceTileEntity;
 
 import javax.annotation.Nonnull;
 
@@ -59,7 +59,7 @@ public class TurtleRefuelCommand implements ITurtleCommand
 
     private int getFuelPerItem( @Nonnull ItemStack stack )
     {
-        return (TileEntityFurnace.getItemBurnTime( stack ) * 5) / 100;
+        return (stack.getBurnTime() * 5) / 100;
     }
 
     private TurtleCommandResult refuel( ITurtleAccess turtle, @Nonnull ItemStack stack, boolean testOnly )

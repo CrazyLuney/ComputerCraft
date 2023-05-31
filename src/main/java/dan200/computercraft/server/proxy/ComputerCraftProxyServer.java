@@ -11,9 +11,9 @@ import dan200.computercraft.shared.peripheral.diskdrive.TileDiskDrive;
 import dan200.computercraft.shared.peripheral.printer.TilePrinter;
 import dan200.computercraft.shared.proxy.ComputerCraftProxyCommon;
 import dan200.computercraft.shared.turtle.blocks.TileTurtle;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.util.EnumHand;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.util.Hand;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -36,7 +36,7 @@ public class ComputerCraftProxyServer extends ComputerCraftProxyCommon
     }
 
     @Override
-    public Object getTurtleGUI( InventoryPlayer inventory, TileTurtle turtle )
+    public Object getTurtleGUI( PlayerInventory inventory, TileTurtle turtle )
     {
         return null;
     }
@@ -71,7 +71,7 @@ public class ComputerCraftProxyServer extends ComputerCraftProxyCommon
     }
 
     @Override
-    public Object getDiskDriveGUI( InventoryPlayer inventory, TileDiskDrive drive )
+    public Object getDiskDriveGUI( PlayerInventory inventory, TileDiskDrive drive )
     {
         return null;
     }
@@ -83,19 +83,19 @@ public class ComputerCraftProxyServer extends ComputerCraftProxyCommon
     }
 
     @Override
-    public Object getPrinterGUI( InventoryPlayer inventory, TilePrinter printer )
+    public Object getPrinterGUI( PlayerInventory inventory, TilePrinter printer )
     {
         return null;
     }
 
     @Override
-    public Object getPrintoutGUI( EntityPlayer player, EnumHand hand )
+    public Object getPrintoutGUI( PlayerEntity player, Hand hand )
     {
         return null;
     }
 
     @Override
-    public Object getPocketComputerGUI( EntityPlayer player, EnumHand hand )
+    public Object getPocketComputerGUI( PlayerEntity player, Hand hand )
     {
         return null;
     }

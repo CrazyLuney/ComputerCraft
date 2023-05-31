@@ -10,13 +10,13 @@ import dan200.computercraft.ComputerCraft;
 import dan200.computercraft.shared.computer.blocks.IComputerTile;
 import dan200.computercraft.shared.computer.core.ComputerFamily;
 import net.minecraft.block.Block;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.block.BlockState;
+import net.minecraft.item.ItemGroup;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.util.Direction;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -60,7 +60,7 @@ public class ItemComputer extends ItemComputerBase
         ItemStack result = new ItemStack( this, 1, damage );
         if( id > ItemComputer.HIGHEST_DAMAGE_VALUE_ID )
         {
-            NBTTagCompound nbt = new NBTTagCompound();
+            CompoundNBT nbt = new CompoundNBT();
             nbt.setInteger( "computerID", id );
             result.setTagCompound( nbt );
         }
@@ -72,7 +72,7 @@ public class ItemComputer extends ItemComputerBase
     }
 
     @Override
-    public void getSubItems( @Nullable CreativeTabs tabs, @Nonnull NonNullList<ItemStack> list )
+    public void getSubItems( @Nullable ItemGroup tabs, @Nonnull NonNullList<ItemStack> list )
     {
         if( !isInCreativeTab( tabs ) ) return;
         list.add( ComputerItemFactory.create( -1, null, ComputerFamily.Normal ) );
@@ -80,7 +80,7 @@ public class ItemComputer extends ItemComputerBase
     }
 
     @Override
-    public boolean placeBlockAt( @Nonnull ItemStack stack, @Nonnull EntityPlayer player, World world, @Nonnull BlockPos pos, EnumFacing side, float hitX, float hitY, float hitZ, @Nonnull IBlockState newState )
+    public boolean placeBlockAt( @Nonnull ItemStack stack, @Nonnull PlayerEntity player, World world, @Nonnull BlockPos pos, Direction side, float hitX, float hitY, float hitZ, @Nonnull BlockState newState )
     {
         if( super.placeBlockAt( stack, player, world, pos, side, hitX, hitY, hitZ, newState ) )
         {

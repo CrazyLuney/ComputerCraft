@@ -12,8 +12,8 @@ import dan200.computercraft.shared.common.ClientTerminal;
 import dan200.computercraft.shared.network.ComputerCraftPacket;
 import dan200.computercraft.shared.network.INetworkedThing;
 import dan200.computercraft.shared.util.NBTUtil;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.nbt.CompoundNBT;
 
 public class ClientComputer extends ClientTerminal
     implements IComputer, INetworkedThing
@@ -25,7 +25,7 @@ public class ClientComputer extends ClientTerminal
     private boolean m_on;
     private boolean m_blinking;
     private boolean m_changed;
-    private NBTTagCompound m_userData;
+    private CompoundNBT m_userData;
 
     private boolean m_changedLastFrame;
 
@@ -56,7 +56,7 @@ public class ClientComputer extends ClientTerminal
         return m_changedLastFrame;
     }
 
-    public NBTTagCompound getUserData()
+    public CompoundNBT getUserData()
     {
         return m_userData;
     }
@@ -154,7 +154,7 @@ public class ClientComputer extends ClientTerminal
     }
 
     @Override
-    public void readDescription( NBTTagCompound nbttagcompound )
+    public void readDescription( CompoundNBT nbttagcompound )
     {
         super.readDescription( nbttagcompound );
 
@@ -162,7 +162,7 @@ public class ClientComputer extends ClientTerminal
         String oldLabel = m_label;
         boolean oldOn = m_on;
         boolean oldBlinking = m_blinking;
-        NBTTagCompound oldUserData = m_userData;
+        CompoundNBT oldUserData = m_userData;
 
         m_computerID = nbttagcompound.getInteger( "id" );
         m_label = nbttagcompound.hasKey( "label" ) ? nbttagcompound.getString( "label" ) : null;
@@ -184,7 +184,7 @@ public class ClientComputer extends ClientTerminal
     }
 
     @Override
-    public void handlePacket( ComputerCraftPacket packet, EntityPlayer sender )
+    public void handlePacket( ComputerCraftPacket packet, PlayerEntity sender )
     {
         switch( packet.m_packetType )
         {

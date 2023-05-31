@@ -14,9 +14,9 @@ import dan200.computercraft.shared.computer.core.IComputer;
 import dan200.computercraft.shared.turtle.blocks.TileTurtle;
 import dan200.computercraft.shared.turtle.inventory.ContainerTurtle;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.inventory.GuiContainer;
+import net.minecraft.client.gui.screen.inventory.ContainerScreen;
 import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import org.lwjgl.input.Keyboard;
@@ -24,7 +24,7 @@ import org.lwjgl.input.Mouse;
 
 import java.io.IOException;
 
-public class GuiTurtle extends GuiContainer
+public class GuiTurtle extends ContainerScreen
 {
     private static final ResourceLocation background = new ResourceLocation( "computercraft", "textures/gui/turtle.png" );
     private static final ResourceLocation backgroundAdvanced = new ResourceLocation( "computercraft", "textures/gui/turtle_advanced.png" );
@@ -37,7 +37,7 @@ public class GuiTurtle extends GuiContainer
     protected final IComputer m_computer;
     protected WidgetTerminal m_terminalGui;
     
-    public GuiTurtle( World world, InventoryPlayer inventoryplayer, TileTurtle turtle )
+    public GuiTurtle( World world, PlayerInventory inventoryplayer, TileTurtle turtle )
     {
         this( world, turtle, new ContainerTurtle( inventoryplayer, turtle.getAccess() ) );
     }

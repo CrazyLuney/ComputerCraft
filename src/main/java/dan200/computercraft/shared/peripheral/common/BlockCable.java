@@ -14,10 +14,10 @@ import net.minecraft.block.properties.PropertyBool;
 import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.BlockFaceShape;
 import net.minecraft.block.state.BlockStateContainer;
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.BlockState;
 import net.minecraft.item.Item;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 
@@ -94,18 +94,18 @@ public class BlockCable extends BlockPeripheralBase
     @Nonnull
     @Override
     @Deprecated
-    public IBlockState getStateFromMeta( int meta )
+    public BlockState getStateFromMeta( int meta )
     {
-        IBlockState state = getDefaultState();
+        BlockState state = getDefaultState();
         if( meta < 6 )
         {
             state = state.withProperty( Properties.CABLE, false );
-            state = state.withProperty( Properties.MODEM, BlockCableModemVariant.fromFacing( EnumFacing.getFront( meta ) ) );
+            state = state.withProperty( Properties.MODEM, BlockCableModemVariant.fromFacing( Direction.getFront( meta ) ) );
         }
         else if( meta < 12 )
         {
             state = state.withProperty( Properties.CABLE, true );
-            state = state.withProperty( Properties.MODEM, BlockCableModemVariant.fromFacing( EnumFacing.getFront( meta - 6 ) ) );
+            state = state.withProperty( Properties.MODEM, BlockCableModemVariant.fromFacing( Direction.getFront( meta - 6 ) ) );
         }
         else if( meta == 13 )
         {
@@ -116,7 +116,7 @@ public class BlockCable extends BlockPeripheralBase
     }
 
     @Override
-    public int getMetaFromState( IBlockState state )
+    public int getMetaFromState( BlockState state )
     {
         int meta = 0;
         boolean cable = state.getValue( Properties.CABLE );
@@ -137,7 +137,7 @@ public class BlockCable extends BlockPeripheralBase
     }
 
     @Override
-    public IBlockState getDefaultBlockState( PeripheralType type, EnumFacing placedSide )
+    public BlockState getDefaultBlockState( PeripheralType type, Direction placedSide )
     {
         switch( type )
         {
@@ -163,7 +163,7 @@ public class BlockCable extends BlockPeripheralBase
         }
     }
 
-    private boolean doesConnect( IBlockState state, IBlockAccess world, BlockPos pos, EnumFacing dir )
+    private boolean doesConnect( BlockState state, IBlockAccess world, BlockPos pos, Direction dir )
     {
         if( !state.getValue( Properties.CABLE ) )
         {
@@ -182,14 +182,14 @@ public class BlockCable extends BlockPeripheralBase
     @Nonnull
     @Override
     @Deprecated
-    public IBlockState getActualState( @Nonnull IBlockState state, IBlockAccess world, BlockPos pos )
+    public BlockState getActualState( @Nonnull BlockState state, IBlockAccess world, BlockPos pos )
     {
-        state = state.withProperty( Properties.NORTH, doesConnect( state, world, pos, EnumFacing.NORTH ) );
-        state = state.withProperty( Properties.SOUTH, doesConnect( state, world, pos, EnumFacing.SOUTH ) );
-        state = state.withProperty( Properties.EAST, doesConnect( state, world, pos, EnumFacing.EAST ) );
-        state = state.withProperty( Properties.WEST, doesConnect( state, world, pos, EnumFacing.WEST ) );
-        state = state.withProperty( Properties.UP, doesConnect( state, world, pos, EnumFacing.UP ) );
-        state = state.withProperty( Properties.DOWN, doesConnect( state, world, pos, EnumFacing.DOWN ) );
+        state = state.withProperty( Properties.NORTH, doesConnect( state, world, pos, Direction.NORTH ) );
+        state = state.withProperty( Properties.SOUTH, doesConnect( state, world, pos, Direction.SOUTH ) );
+        state = state.withProperty( Properties.EAST, doesConnect( state, world, pos, Direction.EAST ) );
+        state = state.withProperty( Properties.WEST, doesConnect( state, world, pos, Direction.WEST ) );
+        state = state.withProperty( Properties.UP, doesConnect( state, world, pos, Direction.UP ) );
+        state = state.withProperty( Properties.DOWN, doesConnect( state, world, pos, Direction.DOWN ) );
 
         int anim;
         TileEntity tile = world.getTileEntity( pos );
@@ -217,7 +217,7 @@ public class BlockCable extends BlockPeripheralBase
 
     @Override
     @Deprecated
-    public boolean shouldSideBeRendered( IBlockState state, @Nonnull IBlockAccess world, @Nonnull BlockPos pos, EnumFacing side )
+    public boolean shouldSideBeRendered( BlockState state, @Nonnull IBlockAccess world, @Nonnull BlockPos pos, Direction side )
     {
         return true;
     }
@@ -229,7 +229,7 @@ public class BlockCable extends BlockPeripheralBase
     }
 
     @Override
-    public PeripheralType getPeripheralType( IBlockState state )
+    public PeripheralType getPeripheralType( BlockState state )
     {
         boolean cable = state.getValue( Properties.CABLE );
         BlockCableModemVariant modem = state.getValue( Properties.MODEM );
@@ -255,14 +255,14 @@ public class BlockCable extends BlockPeripheralBase
 
     @Override
     @Deprecated
-    public final boolean isOpaqueCube( IBlockState state )
+    public final boolean isOpaqueCube( BlockState state )
     {
         return false;
     }
 
     @Override
     @Deprecated
-    public final boolean isFullCube( IBlockState state )
+    public final boolean isFullCube( BlockState state )
     {
         return false;
     }
@@ -270,7 +270,7 @@ public class BlockCable extends BlockPeripheralBase
     @Nonnull
     @Override
     @Deprecated
-    public BlockFaceShape getBlockFaceShape( IBlockAccess world, IBlockState state, BlockPos pos, EnumFacing side )
+    public BlockFaceShape getBlockFaceShape( IBlockAccess world, BlockState state, BlockPos pos, Direction side )
     {
         return BlockFaceShape.UNDEFINED;
     }

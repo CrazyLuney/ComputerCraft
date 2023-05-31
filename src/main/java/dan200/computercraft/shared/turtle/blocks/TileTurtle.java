@@ -21,21 +21,21 @@ import dan200.computercraft.shared.util.InventoryUtil;
 import dan200.computercraft.shared.util.RedstoneUtil;
 import dan200.computercraft.shared.util.WorldUtil;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.projectile.EntityFireball;
-import net.minecraft.init.Items;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.projectile.DamagingProjectileEntity;
+import net.minecraft.item.Items;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.ListNBT;
 import net.minecraft.util.*;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TextComponentString;
-import net.minecraft.util.text.TextComponentTranslation;
+import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.items.IItemHandlerModifiable;
@@ -139,7 +139,7 @@ public class TileTurtle extends TileComputerBase
         else
         {
             // Just turn off any redstone we had on
-            for( EnumFacing dir : EnumFacing.VALUES )
+            for( Direction dir : Direction.VALUES )
             {
                 RedstoneUtil.propagateRedstoneOutput( getWorld(), getPos(), dir );
             }
@@ -172,13 +172,13 @@ public class TileTurtle extends TileComputerBase
     }
 
     @Override
-    public boolean onActivate( EntityPlayer player, EnumFacing side, float hitX, float hitY, float hitZ )
+    public boolean onActivate( PlayerEntity player, Direction side, float hitX, float hitY, float hitZ )
     {
         // Request description from server
         requestTileEntityUpdate();
 
         // Apply dye
-        ItemStack currentItem = player.getHeldItem( EnumHand.MAIN_HAND );
+        ItemStack currentItem = player.getHeldItem( Hand.MAIN_HAND );
         if( !currentItem.isEmpty() )
         {
             if( currentItem.getItem() == Items.DYE )
@@ -208,7 +208,7 @@ public class TileTurtle extends TileComputerBase
                         m_brain.setColour( -1 );
                         if( !player.capabilities.isCreativeMode )
                         {
-                            player.setHeldItem( EnumHand.MAIN_HAND, new ItemStack( Items.BUCKET ) );
+                            player.setHeldItem( Hand.MAIN_HAND, new ItemStack( Items.BUCKET ) );
                             player.inventory.markDirty();
                         }
                     }
@@ -222,13 +222,13 @@ public class TileTurtle extends TileComputerBase
     }
 
     @Override
-    protected boolean canNameWithTag( EntityPlayer player )
+    protected boolean canNameWithTag( PlayerEntity player )
     {
         return true;
     }
 
     @Override
-    public void openGUI( EntityPlayer player )
+    public void openGUI( PlayerEntity player )
     {
         ComputerCraft.openTurtleGUI( player, this );
     }
@@ -248,7 +248,7 @@ public class TileTurtle extends TileComputerBase
         }
         else
         {
-            return exploder != null && (exploder instanceof EntityLivingBase || exploder instanceof EntityFireball);
+            return exploder != null && (exploder instanceof LivingEntity || exploder instanceof DamagingProjectileEntity);
         }
     }
 
@@ -264,7 +264,7 @@ public class TileTurtle extends TileComputerBase
     }
 
     @Override
-    protected double getInteractRange( EntityPlayer player )
+    protected double getInteractRange( PlayerEntity player )
     {
         return 12.0;
     }
@@ -329,17 +329,17 @@ public class TileTurtle extends TileComputerBase
     }
 
     @Override
-    public void readFromNBT( NBTTagCompound nbttagcompound )
+    public void readFromNBT( CompoundNBT nbttagcompound )
     {
         super.readFromNBT(nbttagcompound);
 
         // Read inventory
-        NBTTagList nbttaglist = nbttagcompound.getTagList("Items", Constants.NBT.TAG_COMPOUND);
+        ListNBT nbttaglist = nbttagcompound.getTagList("Items", Constants.NBT.TAG_COMPOUND);
         m_inventory = NonNullList.withSize( INVENTORY_SIZE, ItemStack.EMPTY );
         m_previousInventory = NonNullList.withSize( INVENTORY_SIZE, ItemStack.EMPTY );
         for( int i=0; i<nbttaglist.tagCount(); ++i )
         {
-            NBTTagCompound itemtag = nbttaglist.getCompoundTagAt( i );
+            CompoundNBT itemtag = nbttaglist.getCompoundTagAt( i );
             int slot = itemtag.getByte("Slot") & 0xff;
             if( slot >= 0 && slot < getSizeInventory() )
             {
@@ -354,17 +354,17 @@ public class TileTurtle extends TileComputerBase
 
     @Nonnull
     @Override
-    public NBTTagCompound writeToNBT( NBTTagCompound nbttagcompound )
+    public CompoundNBT writeToNBT( CompoundNBT nbttagcompound )
     {
         nbttagcompound = super.writeToNBT( nbttagcompound );
 
         // Write inventory
-        NBTTagList nbttaglist = new NBTTagList();
+        ListNBT nbttaglist = new ListNBT();
         for( int i=0; i<INVENTORY_SIZE; ++i )
         {
             if( !m_inventory.get(i).isEmpty() )
             {
-                NBTTagCompound itemtag = new NBTTagCompound();
+                CompoundNBT itemtag = new CompoundNBT();
                 itemtag.setByte( "Slot", (byte)i );
                 m_inventory.get(i).writeToNBT(itemtag);
                 nbttaglist.appendTag(itemtag);
@@ -393,13 +393,13 @@ public class TileTurtle extends TileComputerBase
     // IDirectionalTile
 
     @Override
-    public EnumFacing getDirection()
+    public Direction getDirection()
     {
         return m_brain.getDirection();
     }
 
     @Override
-    public void setDirection( EnumFacing dir )
+    public void setDirection( Direction dir )
     {
         m_brain.setDirection( dir );
     }
@@ -595,11 +595,11 @@ public class TileTurtle extends TileComputerBase
     {
         if( hasCustomName() )
         {
-            return new TextComponentString( getName() );
+            return new StringTextComponent( getName() );
         }
         else
         {
-            return new TextComponentTranslation( getName() );
+            return new TranslationTextComponent( getName() );
         }
     }
 
@@ -610,12 +610,12 @@ public class TileTurtle extends TileComputerBase
     }
 
     @Override
-    public void openInventory( @Nonnull EntityPlayer player )
+    public void openInventory( @Nonnull PlayerEntity player )
     {
     }
 
     @Override
-    public void closeInventory( @Nonnull EntityPlayer player )
+    public void closeInventory( @Nonnull PlayerEntity player )
     {
     }
 
@@ -646,7 +646,7 @@ public class TileTurtle extends TileComputerBase
     }
 
     @Override
-    public boolean isUsableByPlayer( @Nonnull EntityPlayer player )
+    public boolean isUsableByPlayer( @Nonnull PlayerEntity player )
     {
         return isUsable( player, false );
     }
@@ -668,7 +668,7 @@ public class TileTurtle extends TileComputerBase
     {
     }
 
-    public boolean isUseableByRemote( EntityPlayer player )
+    public boolean isUseableByRemote( PlayerEntity player )
     {
         return isUsable( player, true );
     }
@@ -687,14 +687,14 @@ public class TileTurtle extends TileComputerBase
     // Networking stuff
 
     @Override
-    public void writeDescription( @Nonnull NBTTagCompound nbttagcompound )
+    public void writeDescription( @Nonnull CompoundNBT nbttagcompound )
     {
         super.writeDescription( nbttagcompound );
         m_brain.writeDescription( nbttagcompound );
     }
 
     @Override
-    public void readDescription( @Nonnull NBTTagCompound nbttagcompound )
+    public void readDescription( @Nonnull CompoundNBT nbttagcompound )
     {
         super.readDescription( nbttagcompound );
         m_brain.readDescription( nbttagcompound );
@@ -732,14 +732,14 @@ public class TileTurtle extends TileComputerBase
     }
 
     @Override
-    public boolean hasCapability( @Nonnull Capability<?> capability, @Nullable EnumFacing facing )
+    public boolean hasCapability( @Nonnull Capability<?> capability, @Nullable Direction facing )
     {
         return capability == ITEM_HANDLER_CAPABILITY ||  super.hasCapability( capability, facing );
     }
 
     @Nullable
     @Override
-    public <T> T getCapability( @Nonnull Capability<T> capability, @Nullable EnumFacing facing )
+    public <T> T getCapability( @Nonnull Capability<T> capability, @Nullable Direction facing )
     {
         if( capability == ITEM_HANDLER_CAPABILITY )
         {

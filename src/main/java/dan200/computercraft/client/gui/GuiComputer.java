@@ -12,16 +12,16 @@ import dan200.computercraft.shared.computer.blocks.TileComputer;
 import dan200.computercraft.shared.computer.core.ComputerFamily;
 import dan200.computercraft.shared.computer.core.IComputer;
 import dan200.computercraft.shared.computer.inventory.ContainerComputer;
-import net.minecraft.client.gui.inventory.GuiContainer;
+import net.minecraft.client.gui.screen.inventory.ContainerScreen;
 import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.inventory.Container;
+import net.minecraft.inventory.container.Container;
 import net.minecraft.util.ResourceLocation;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 
 import java.io.IOException;
 
-public class GuiComputer extends GuiContainer
+public class GuiComputer extends ContainerScreen
 {
     private static final ResourceLocation background = new ResourceLocation( "computercraft", "textures/gui/corners.png" );
     private static final ResourceLocation backgroundAdvanced = new ResourceLocation( "computercraft", "textures/gui/corners_advanced.png" );

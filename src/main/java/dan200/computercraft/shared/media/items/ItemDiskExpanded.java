@@ -9,7 +9,7 @@ package dan200.computercraft.shared.media.items;
 import dan200.computercraft.ComputerCraft;
 import dan200.computercraft.shared.util.Colour;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 
 import javax.annotation.Nonnull;
 
@@ -24,10 +24,10 @@ public class ItemDiskExpanded extends ItemDiskLegacy
     {
         ItemStack stack = new ItemStack( ComputerCraft.Items.diskExpanded, 1, 0 );
         
-        NBTTagCompound nbt = stack.getTagCompound();
+        CompoundNBT nbt = stack.getTagCompound();
         if( nbt == null )
         {
-            nbt = new NBTTagCompound();
+            nbt = new CompoundNBT();
             stack.setTagCompound(nbt);
         }
         nbt.setInteger( "color", colour );
@@ -39,7 +39,7 @@ public class ItemDiskExpanded extends ItemDiskLegacy
     @Override    
     public int getDiskID( @Nonnull ItemStack stack )
     {
-        NBTTagCompound nbt = stack.getTagCompound();
+        CompoundNBT nbt = stack.getTagCompound();
         if( nbt != null && nbt.hasKey( "diskID" ) )
         {
             return nbt.getInteger( "diskID" );
@@ -52,10 +52,10 @@ public class ItemDiskExpanded extends ItemDiskLegacy
     {
         if( id >= 0 )
         {
-            NBTTagCompound nbt = stack.getTagCompound();
+            CompoundNBT nbt = stack.getTagCompound();
             if( nbt == null )
             {
-                nbt = new NBTTagCompound();
+                nbt = new CompoundNBT();
                 stack.setTagCompound( nbt );
             }
             nbt.setInteger( "diskID", id );
@@ -65,7 +65,7 @@ public class ItemDiskExpanded extends ItemDiskLegacy
     @Override
     public int getColour( @Nonnull ItemStack stack )
     {
-        NBTTagCompound nbt = stack.getTagCompound();
+        CompoundNBT nbt = stack.getTagCompound();
         if( nbt != null && nbt.hasKey( "color" ) )
         {
             return nbt.getInteger( "color" );

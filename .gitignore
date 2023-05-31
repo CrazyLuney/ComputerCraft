@@ -1,3 +1,4 @@
+bin
 build
 out
 run
@@ -10,3 +11,4 @@ deploy
 luaj-2.0.3/lib
 luaj-2.0.3/*.jar
 *.DS_Store
+.vscode

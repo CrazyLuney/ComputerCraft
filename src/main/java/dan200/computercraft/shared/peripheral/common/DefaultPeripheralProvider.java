@@ -13,7 +13,7 @@ import dan200.computercraft.shared.computer.blocks.TileComputerBase;
 import dan200.computercraft.shared.turtle.blocks.TileTurtle;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.util.Direction;
 import net.minecraft.world.World;
 
 import javax.annotation.Nonnull;
@@ -25,7 +25,7 @@ public class DefaultPeripheralProvider implements IPeripheralProvider
     }
 
     @Override
-    public IPeripheral getPeripheral( @Nonnull World world, @Nonnull BlockPos pos, @Nonnull EnumFacing side )
+    public IPeripheral getPeripheral( @Nonnull World world, @Nonnull BlockPos pos, @Nonnull Direction side )
     {
         TileEntity tile = world.getTileEntity( pos );
         if( tile != null )

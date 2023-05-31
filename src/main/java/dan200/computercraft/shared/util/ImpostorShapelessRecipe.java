@@ -7,13 +7,13 @@
 package dan200.computercraft.shared.util;
 
 import com.google.gson.JsonObject;
-import net.minecraft.inventory.InventoryCrafting;
+import net.minecraft.inventory.CraftingInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.item.crafting.ShapedRecipes;
-import net.minecraft.item.crafting.ShapelessRecipes;
-import net.minecraft.util.JsonUtils;
+import net.minecraft.item.crafting.ShapedRecipe;
+import net.minecraft.item.crafting.ShapelessRecipe;
+import net.minecraft.util.JSONUtils;
 import net.minecraft.util.NonNullList;
 import net.minecraft.world.World;
 import net.minecraftforge.common.crafting.IRecipeFactory;
@@ -21,7 +21,7 @@ import net.minecraftforge.common.crafting.JsonContext;
 
 import javax.annotation.Nonnull;
 
-public class ImpostorShapelessRecipe extends ShapelessRecipes
+public class ImpostorShapelessRecipe extends ShapelessRecipe
 {
     public ImpostorShapelessRecipe( @Nonnull String group, @Nonnull ItemStack result, NonNullList<Ingredient> ingredients )
     {
@@ -41,14 +41,14 @@ public class ImpostorShapelessRecipe extends ShapelessRecipes
     }
 
     @Override
-    public boolean matches( InventoryCrafting inv, World world )
+    public boolean matches( CraftingInventory inv, World world )
     {
         return false;
     }
 
     @Nonnull
     @Override
-    public ItemStack getCraftingResult( InventoryCrafting inventory )
+    public ItemStack getCraftingResult( CraftingInventory inventory )
     {
         return ItemStack.EMPTY;
     }
@@ -58,9 +58,9 @@ public class ImpostorShapelessRecipe extends ShapelessRecipes
         @Override
         public IRecipe parse( JsonContext context, JsonObject json )
         {
-            String group = JsonUtils.getString( json, "group", "" );
+            String group = JSONUtils.getString( json, "group", "" );
             NonNullList<Ingredient> ings = RecipeUtil.getIngredients( context, json );
-            ItemStack itemstack = ShapedRecipes.deserializeItem( JsonUtils.getJsonObject( json, "result" ), true );
+            ItemStack itemstack = ShapedRecipe.deserializeItem( JSONUtils.getJsonObject( json, "result" ), true );
             return new ImpostorShapelessRecipe( group, itemstack, ings );
         }
     }

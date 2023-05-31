@@ -6,10 +6,10 @@
 
 package dan200.computercraft.shared.common;
 
-import net.minecraft.util.EnumFacing;
+import net.minecraft.util.Direction;
 
 public interface IDirectionalTile
 {
-    EnumFacing getDirection();
-    void setDirection( EnumFacing dir );
+    Direction getDirection();
+    void setDirection( Direction dir );
 }

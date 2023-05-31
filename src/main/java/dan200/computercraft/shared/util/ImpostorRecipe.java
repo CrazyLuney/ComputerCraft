@@ -7,12 +7,12 @@
 package dan200.computercraft.shared.util;
 
 import com.google.gson.JsonObject;
-import net.minecraft.inventory.InventoryCrafting;
+import net.minecraft.inventory.CraftingInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.item.crafting.ShapedRecipes;
-import net.minecraft.util.JsonUtils;
+import net.minecraft.item.crafting.ShapedRecipe;
+import net.minecraft.util.JSONUtils;
 import net.minecraft.util.NonNullList;
 import net.minecraft.world.World;
 import net.minecraftforge.common.crafting.CraftingHelper;
@@ -21,7 +21,7 @@ import net.minecraftforge.common.crafting.JsonContext;
 
 import javax.annotation.Nonnull;
 
-public class ImpostorRecipe extends ShapedRecipes
+public class ImpostorRecipe extends ShapedRecipe
 {
     public ImpostorRecipe( @Nonnull String group, int width, int height, NonNullList<Ingredient> ingredients, @Nonnull ItemStack result )
     {
@@ -41,14 +41,14 @@ public class ImpostorRecipe extends ShapedRecipes
     }
 
     @Override
-    public boolean matches( @Nonnull InventoryCrafting inv, World world )
+    public boolean matches( @Nonnull CraftingInventory inv, World world )
     {
         return false;
     }
 
     @Nonnull
     @Override
-    public ItemStack getCraftingResult( @Nonnull InventoryCrafting _inventory )
+    public ItemStack getCraftingResult( @Nonnull CraftingInventory _inventory )
     {
         return ItemStack.EMPTY;
     }
@@ -58,9 +58,9 @@ public class ImpostorRecipe extends ShapedRecipes
         @Override
         public IRecipe parse( JsonContext ctx, JsonObject json )
         {
-            String group = JsonUtils.getString( json, "group", "" );
+            String group = JSONUtils.getString( json, "group", "" );
             CraftingHelper.ShapedPrimer primer = RecipeUtil.getPrimer( ctx, json );
-            ItemStack result = CraftingHelper.getItemStack( JsonUtils.getJsonObject( json, "result" ), ctx );
+            ItemStack result = CraftingHelper.getItemStack( JSONUtils.getJsonObject( json, "result" ), ctx );
             return new ImpostorRecipe( group, primer.width, primer.height, primer.input, result );
         }
     }

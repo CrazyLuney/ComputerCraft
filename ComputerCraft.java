@@ -1,3 +1,5 @@
+* net.minecraft.world.storage.loot.functions.LootFunction.Serializer -> net.minecraft.world.storage.loot.functions.ILootFunction.Serializer
+d:\work\minecraft\ComputerCraft-migration\src\main\java\dan200\computercraft\ComputerCraft.java
 /*
  * This file is part of ComputerCraft - http://www.computercraft.info
  * Copyright Daniel Ratcliffe, 2011-2017. Do not distribute without permission.
@@ -51,13 +53,13 @@ import dan200.computercraft.shared.turtle.upgrades.*;
 import dan200.computercraft.shared.util.*;
 import io.netty.buffer.Unpooled;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.util.Direction;
-import net.minecraft.util.Hand;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumHand;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
@@ -464,36 +466,36 @@ public class ComputerCraft
         return proxy.getRecordInfo( recordStack );
     }
 
-    public static void openDiskDriveGUI( PlayerEntity player, TileDiskDrive drive )
+    public static void openDiskDriveGUI( EntityPlayer player, TileDiskDrive drive )
     {
         BlockPos pos = drive.getPos();
         player.openGui( ComputerCraft.instance, ComputerCraft.diskDriveGUIID, player.getEntityWorld(), pos.getX(), pos.getY(), pos.getZ() );
     }
 
-    public static void openComputerGUI( PlayerEntity player, TileComputer computer )
+    public static void openComputerGUI( EntityPlayer player, TileComputer computer )
     {
         BlockPos pos = computer.getPos();
         player.openGui( ComputerCraft.instance, ComputerCraft.computerGUIID, player.getEntityWorld(), pos.getX(), pos.getY(), pos.getZ() );
     }
 
-    public static void openPrinterGUI( PlayerEntity player, TilePrinter printer )
+    public static void openPrinterGUI( EntityPlayer player, TilePrinter printer )
     {
         BlockPos pos = printer.getPos();
         player.openGui( ComputerCraft.instance, ComputerCraft.printerGUIID, player.getEntityWorld(), pos.getX(), pos.getY(), pos.getZ() );
     }
 
-    public static void openTurtleGUI( PlayerEntity player, TileTurtle turtle )
+    public static void openTurtleGUI( EntityPlayer player, TileTurtle turtle )
     {
         BlockPos pos = turtle.getPos();
         player.openGui( instance, ComputerCraft.turtleGUIID, player.getEntityWorld(), pos.getX(), pos.getY(), pos.getZ() );
     }
 
-    public static void openPrintoutGUI( PlayerEntity player, Hand hand )
+    public static void openPrintoutGUI( EntityPlayer player, EnumHand hand )
     {
         player.openGui( ComputerCraft.instance, ComputerCraft.printoutGUIID, player.getEntityWorld(), hand.ordinal(), 0, 0 );
     }
 
-    public static void openPocketComputerGUI( PlayerEntity player, Hand hand )
+    public static void openPocketComputerGUI( EntityPlayer player, EnumHand hand )
     {
         player.openGui( ComputerCraft.instance, ComputerCraft.pocketComputerGUIID, player.getEntityWorld(), hand.ordinal(), 0, 0 );
     }
@@ -520,9 +522,9 @@ public class ComputerCraft
         return new FMLProxyPacket( buffer, "CC" );
     }
 
-    public static void sendToPlayer( PlayerEntity player, ComputerCraftPacket packet )
+    public static void sendToPlayer( EntityPlayer player, ComputerCraftPacket packet )
     {
-        networkEventChannel.sendTo( encode( packet ), (ServerPlayerEntity)player );
+        networkEventChannel.sendTo( encode( packet ), (EntityPlayerMP)player );
     }
 
     public static void sendToAllPlayers( ComputerCraftPacket packet )
@@ -535,12 +537,12 @@ public class ComputerCraft
         networkEventChannel.sendToServer( encode( packet ) );
     }
 
-    public static void handlePacket( ComputerCraftPacket packet, PlayerEntity player )
+    public static void handlePacket( ComputerCraftPacket packet, EntityPlayer player )
     {
         proxy.handlePacket( packet, player );
     }
 
-    public static boolean canPlayerUseCommands( PlayerEntity player )
+    public static boolean canPlayerUseCommands( EntityPlayer player )
     {
         MinecraftServer server = player.getServer();
         if( server != null )
@@ -550,7 +552,7 @@ public class ComputerCraft
         return false;
     }
 
-    public static boolean isPlayerOpped( PlayerEntity player )
+    public static boolean isPlayerOpped( EntityPlayer player )
     {
         MinecraftServer server = player.getServer();
         if( server != null )
@@ -568,7 +570,7 @@ public class ComputerCraft
         }
     }
 
-    public static boolean isBlockEnterable( World world, BlockPos pos, PlayerEntity player )
+    public static boolean isBlockEnterable( World world, BlockPos pos, EntityPlayer player )
     {
         MinecraftServer server = player.getServer();
         if( server != null && !world.isRemote )
@@ -589,7 +591,7 @@ public class ComputerCraft
         return true;
     }
 
-    public static boolean isBlockEditable( World world, BlockPos pos, PlayerEntity player )
+    public static boolean isBlockEditable( World world, BlockPos pos, EntityPlayer player )
     {
         MinecraftServer server = player.getServer();
         if( server != null && !world.isRemote )
@@ -646,7 +648,7 @@ public class ComputerCraft
         }
     }
 
-    public static IPeripheral getPeripheralAt( World world, BlockPos pos, Direction side )
+    public static IPeripheral getPeripheralAt( World world, BlockPos pos, EnumFacing side )
     {
         // Try the handlers in order:
         for( IPeripheralProvider peripheralProvider : peripheralProviders )
@@ -667,7 +669,7 @@ public class ComputerCraft
         return null;
     }
 
-    public static int getDefaultBundledRedstoneOutput( World world, BlockPos pos, Direction side )
+    public static int getDefaultBundledRedstoneOutput( World world, BlockPos pos, EnumFacing side )
     {
         if( WorldUtil.isBlockInWorld( world, pos ) )
         {
@@ -676,7 +678,7 @@ public class ComputerCraft
         return -1;
     }
 
-    public static int getBundledRedstoneOutput( World world, BlockPos pos, Direction side )
+    public static int getBundledRedstoneOutput( World world, BlockPos pos, EnumFacing side )
     {
         int y = pos.getY();
         if( y < 0 || y >= world.getHeight() )
@@ -1027,3 +1029,4 @@ public class ComputerCraft
         turtleProxy.clearEntityDropConsumer( entity );
     }
 }
+

@@ -14,9 +14,9 @@ import net.minecraft.block.properties.PropertyBool;
 import net.minecraft.block.properties.PropertyDirection;
 import net.minecraft.block.state.BlockFaceShape;
 import net.minecraft.block.state.BlockStateContainer;
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.BlockState;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 
@@ -36,7 +36,7 @@ public class BlockAdvancedModem extends BlockPeripheralBase
         setUnlocalizedName( "computercraft:advanced_modem" );
         setCreativeTab( ComputerCraft.mainCreativeTab );
         setDefaultState( this.blockState.getBaseState()
-            .withProperty( Properties.FACING, EnumFacing.NORTH )
+            .withProperty( Properties.FACING, Direction.NORTH )
             .withProperty( Properties.ON, false )
         );
     }
@@ -51,28 +51,28 @@ public class BlockAdvancedModem extends BlockPeripheralBase
     @Nonnull
     @Override
     @Deprecated
-    public IBlockState getStateFromMeta( int meta )
+    public BlockState getStateFromMeta( int meta )
     {
-        IBlockState state = getDefaultState();
-        state = state.withProperty( Properties.FACING, EnumFacing.getFront( meta ) );
+        BlockState state = getDefaultState();
+        state = state.withProperty( Properties.FACING, Direction.getFront( meta ) );
         state = state.withProperty( Properties.ON, false );
         return state;
     }
 
     @Override
-    public int getMetaFromState( IBlockState state )
+    public int getMetaFromState( BlockState state )
     {
-        EnumFacing dir = state.getValue( Properties.FACING );
+        Direction dir = state.getValue( Properties.FACING );
         return dir.getIndex();
     }
 
     @Nonnull
     @Override
     @Deprecated
-    public IBlockState getActualState( @Nonnull IBlockState state, IBlockAccess world, BlockPos pos )
+    public BlockState getActualState( @Nonnull BlockState state, IBlockAccess world, BlockPos pos )
     {
         int anim;
-        EnumFacing dir;
+        Direction dir;
         TileEntity tile = world.getTileEntity( pos );
         if( tile != null && tile instanceof TilePeripheralBase )
         {
@@ -92,9 +92,9 @@ public class BlockAdvancedModem extends BlockPeripheralBase
     }
 
     @Override
-    public IBlockState getDefaultBlockState( PeripheralType type, EnumFacing placedSide )
+    public BlockState getDefaultBlockState( PeripheralType type, Direction placedSide )
     {
-        EnumFacing dir = placedSide.getOpposite();
+        Direction dir = placedSide.getOpposite();
         return getDefaultState().withProperty( Properties.FACING, dir );
     }
 
@@ -105,7 +105,7 @@ public class BlockAdvancedModem extends BlockPeripheralBase
     }
 
     @Override
-    public PeripheralType getPeripheralType( IBlockState state )
+    public PeripheralType getPeripheralType( BlockState state )
     {
         return PeripheralType.AdvancedModem;
     }
@@ -118,14 +118,14 @@ public class BlockAdvancedModem extends BlockPeripheralBase
 
     @Override
     @Deprecated
-    public final boolean isOpaqueCube( IBlockState state )
+    public final boolean isOpaqueCube( BlockState state )
     {
         return false;
     }
 
     @Override
     @Deprecated
-    public final boolean isFullCube( IBlockState state )
+    public final boolean isFullCube( BlockState state )
     {
         return false;
     }
@@ -133,7 +133,7 @@ public class BlockAdvancedModem extends BlockPeripheralBase
     @Nonnull
     @Override
     @Deprecated
-    public BlockFaceShape getBlockFaceShape( IBlockAccess world, IBlockState state, BlockPos pos, EnumFacing side )
+    public BlockFaceShape getBlockFaceShape( IBlockAccess world, BlockState state, BlockPos pos, Direction side )
     {
         return BlockFaceShape.UNDEFINED;
     }

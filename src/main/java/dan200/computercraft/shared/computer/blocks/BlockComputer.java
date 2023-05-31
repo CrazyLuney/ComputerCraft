@@ -16,12 +16,12 @@ import net.minecraft.block.properties.PropertyBool;
 import net.minecraft.block.properties.PropertyDirection;
 import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.BlockStateContainer;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.block.BlockState;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
@@ -33,7 +33,7 @@ public class BlockComputer extends BlockComputerBase
     // Statics
     public static class Properties
     {
-        public static final PropertyDirection FACING = PropertyDirection.create("facing", EnumFacing.Plane.HORIZONTAL);
+        public static final PropertyDirection FACING = PropertyDirection.create("facing", Direction.Plane.HORIZONTAL);
         public static final PropertyBool ADVANCED = PropertyBool.create("advanced");
         public static final PropertyEnum<ComputerState> STATE = PropertyEnum.create("state", ComputerState.class);
     }
@@ -47,7 +47,7 @@ public class BlockComputer extends BlockComputerBase
         setUnlocalizedName( "computercraft:computer" );
         setCreativeTab( ComputerCraft.mainCreativeTab );
         setDefaultState( this.blockState.getBaseState()
-            .withProperty( Properties.FACING, EnumFacing.NORTH )
+            .withProperty( Properties.FACING, Direction.NORTH )
             .withProperty( Properties.ADVANCED, false )
             .withProperty( Properties.STATE, ComputerState.Off )
         );
@@ -63,15 +63,15 @@ public class BlockComputer extends BlockComputerBase
     @Nonnull
     @Override
     @Deprecated
-    public IBlockState getStateFromMeta( int meta )
+    public BlockState getStateFromMeta( int meta )
     {
-        EnumFacing dir = EnumFacing.getFront( meta & 0x7 );
-        if( dir.getAxis() == EnumFacing.Axis.Y )
+        Direction dir = Direction.getFront( meta & 0x7 );
+        if( dir.getAxis() == Direction.Axis.Y )
         {
-            dir = EnumFacing.NORTH;
+            dir = Direction.NORTH;
         }
 
-        IBlockState state = getDefaultState().withProperty( Properties.FACING, dir );
+        BlockState state = getDefaultState().withProperty( Properties.FACING, dir );
         if( meta > 8 )
         {
             state = state.withProperty( Properties.ADVANCED, true );
@@ -84,7 +84,7 @@ public class BlockComputer extends BlockComputerBase
     }
 
     @Override
-    public int getMetaFromState( IBlockState state )
+    public int getMetaFromState( BlockState state )
     {
         int meta = state.getValue( Properties.FACING ).getIndex();
         if( state.getValue( Properties.ADVANCED ) )
@@ -95,10 +95,10 @@ public class BlockComputer extends BlockComputerBase
     }
 
     @Override
-    protected IBlockState getDefaultBlockState( ComputerFamily family, EnumFacing placedSide )
+    protected BlockState getDefaultBlockState( ComputerFamily family, Direction placedSide )
     {
-        IBlockState state = getDefaultState();
-        if( placedSide.getAxis() != EnumFacing.Axis.Y )
+        BlockState state = getDefaultState();
+        if( placedSide.getAxis() != Direction.Axis.Y )
         {
             state = state.withProperty( Properties.FACING, placedSide );
         }
@@ -120,7 +120,7 @@ public class BlockComputer extends BlockComputerBase
     @Nonnull
     @Override
     @Deprecated
-    public IBlockState getActualState( @Nonnull IBlockState state, IBlockAccess world, BlockPos pos )
+    public BlockState getActualState( @Nonnull BlockState state, IBlockAccess world, BlockPos pos )
     {
         TileEntity tile = world.getTileEntity( pos );
         if( tile != null && tile instanceof IComputerTile )
@@ -148,7 +148,7 @@ public class BlockComputer extends BlockComputerBase
     }
 
     @Override
-    public ComputerFamily getFamily( IBlockState state )
+    public ComputerFamily getFamily( BlockState state )
     {
         if( state.getValue( Properties.ADVANCED ) ) {
             return ComputerFamily.Advanced;
@@ -164,7 +164,7 @@ public class BlockComputer extends BlockComputerBase
     }
 
     @Override
-    public void onBlockPlacedBy( World world, BlockPos pos, IBlockState state, EntityLivingBase player, @Nonnull ItemStack stack )
+    public void onBlockPlacedBy( World world, BlockPos pos, BlockState state, LivingEntity player, @Nonnull ItemStack stack )
     {
         // Not sure why this is necessary
         TileEntity tile = world.getTileEntity( pos );
@@ -175,7 +175,7 @@ public class BlockComputer extends BlockComputerBase
         }
 
         // Set direction
-        EnumFacing dir = DirectionUtil.fromEntityRot( player );
+        Direction dir = DirectionUtil.fromEntityRot( player );
         setDirection( world, pos, dir );
     }
 }

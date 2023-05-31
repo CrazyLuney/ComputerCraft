@@ -11,10 +11,10 @@ import dan200.computercraft.shared.network.ComputerCraftPacket;
 import dan200.computercraft.shared.peripheral.diskdrive.TileDiskDrive;
 import dan200.computercraft.shared.peripheral.printer.TilePrinter;
 import dan200.computercraft.shared.turtle.blocks.TileTurtle;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumHand;
+import net.minecraft.util.Hand;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -36,13 +36,13 @@ public interface IComputerCraftProxy
     String getRecordInfo( @Nonnull ItemStack item );
     void playRecord( SoundEvent record, String recordInfo, World world, BlockPos pos );
 
-    Object getDiskDriveGUI( InventoryPlayer inventory, TileDiskDrive drive );
+    Object getDiskDriveGUI( PlayerInventory inventory, TileDiskDrive drive );
     Object getComputerGUI( TileComputer computer );
-    Object getPrinterGUI( InventoryPlayer inventory, TilePrinter printer );
-    Object getTurtleGUI( InventoryPlayer inventory, TileTurtle turtle );
-    Object getPrintoutGUI( EntityPlayer player, EnumHand hand );
-    Object getPocketComputerGUI( EntityPlayer player, EnumHand hand );
+    Object getPrinterGUI( PlayerInventory inventory, TilePrinter printer );
+    Object getTurtleGUI( PlayerInventory inventory, TileTurtle turtle );
+    Object getPrintoutGUI( PlayerEntity player, Hand hand );
+    Object getPocketComputerGUI( PlayerEntity player, Hand hand );
 
     File getWorldDir( World world );
-    void handlePacket( ComputerCraftPacket packet, EntityPlayer player );
+    void handlePacket( ComputerCraftPacket packet, PlayerEntity player );
 }

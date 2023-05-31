@@ -8,18 +8,18 @@ package dan200.computercraft.shared.turtle.entity;
 
 import dan200.computercraft.api.turtle.ITurtleAccess;
 import dan200.computercraft.shared.turtle.core.TurtleBrain;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.inventory.EntityEquipmentSlot;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumHand;
-import net.minecraft.util.EnumHandSide;
+import net.minecraft.util.Hand;
+import net.minecraft.util.HandSide;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
 import javax.annotation.Nonnull;
 import java.util.ArrayList;
 
-public class TurtleVisionCamera extends EntityLivingBase
+public class TurtleVisionCamera extends LivingEntity
 {
     private ITurtleAccess m_turtle;
     private ArrayList<ItemStack> m_armor;
@@ -45,9 +45,9 @@ public class TurtleVisionCamera extends EntityLivingBase
 
     @Nonnull
     @Override
-    public EnumHandSide getPrimaryHand()
+    public HandSide getPrimaryHand()
     {
-        return EnumHandSide.RIGHT;
+        return HandSide.RIGHT;
     }
 
     @Override
@@ -86,23 +86,23 @@ public class TurtleVisionCamera extends EntityLivingBase
         }
     }
 
-    // EntityLivingBase overrides:
+    // LivingEntity overrides:
 
     @Nonnull
     @Override
-    public ItemStack getHeldItem( EnumHand hand )
+    public ItemStack getHeldItem( Hand hand )
     {
         return ItemStack.EMPTY;
     }
 
     @Override
-    public void setItemStackToSlot( @Nonnull EntityEquipmentSlot slot, @Nonnull ItemStack stack )
+    public void setItemStackToSlot( @Nonnull EquipmentSlotType slot, @Nonnull ItemStack stack )
     {
     }
 
     @Nonnull
     @Override
-    public ItemStack getItemStackFromSlot( @Nonnull EntityEquipmentSlot slot )
+    public ItemStack getItemStackFromSlot( @Nonnull EquipmentSlotType slot )
     {
         return ItemStack.EMPTY;
     }

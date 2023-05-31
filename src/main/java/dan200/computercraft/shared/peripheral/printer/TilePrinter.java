@@ -13,22 +13,22 @@ import dan200.computercraft.shared.media.items.ItemPrintout;
 import dan200.computercraft.shared.peripheral.PeripheralType;
 import dan200.computercraft.shared.peripheral.common.TilePeripheralBase;
 import dan200.computercraft.shared.util.InventoryUtil;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.item.EntityItem;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Items;
+import net.minecraft.block.BlockState;
+import net.minecraft.entity.item.ItemEntity;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.Items;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.ListNBT;
+import net.minecraft.util.Direction;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TextComponentString;
-import net.minecraft.util.text.TextComponentTranslation;
+import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.Constants;
@@ -75,7 +75,7 @@ public class TilePrinter extends TilePeripheralBase
     }
 
     @Override
-    public boolean onActivate( EntityPlayer player, EnumFacing side, float hitX, float hitY, float hitZ )
+    public boolean onActivate( PlayerEntity player, Direction side, float hitX, float hitY, float hitZ )
     {
         if( !player.isSneaking() )
         {
@@ -89,7 +89,7 @@ public class TilePrinter extends TilePeripheralBase
     }
 
     @Override
-    public void readFromNBT(NBTTagCompound nbttagcompound)
+    public void readFromNBT(CompoundNBT nbttagcompound)
     {
         super.readFromNBT(nbttagcompound);
             
@@ -104,10 +104,10 @@ public class TilePrinter extends TilePeripheralBase
         // Read inventory
         synchronized( m_inventory )
         {
-            NBTTagList nbttaglist = nbttagcompound.getTagList( "Items", Constants.NBT.TAG_COMPOUND );
+            ListNBT nbttaglist = nbttagcompound.getTagList( "Items", Constants.NBT.TAG_COMPOUND );
             for( int i=0; i<nbttaglist.tagCount(); ++i )
             {
-                NBTTagCompound itemTag = nbttaglist.getCompoundTagAt( i );
+                CompoundNBT itemTag = nbttaglist.getCompoundTagAt( i );
                 int j = itemTag.getByte("Slot") & 0xff;
                 if (j >= 0 && j < m_inventory.size())
                 {
@@ -119,7 +119,7 @@ public class TilePrinter extends TilePeripheralBase
 
     @Nonnull
     @Override
-    public NBTTagCompound writeToNBT(NBTTagCompound nbttagcompound)
+    public CompoundNBT writeToNBT(CompoundNBT nbttagcompound)
     {
         nbttagcompound = super.writeToNBT(nbttagcompound);
 
@@ -134,12 +134,12 @@ public class TilePrinter extends TilePeripheralBase
         // Write inventory
         synchronized( m_inventory )
         {
-            NBTTagList nbttaglist = new NBTTagList();
+            ListNBT nbttaglist = new ListNBT();
             for(int i=0; i<m_inventory.size(); ++i)
             {
                 if( !m_inventory.get( i ).isEmpty() )
                 {
-                    NBTTagCompound itemtag = new NBTTagCompound();
+                    CompoundNBT itemtag = new CompoundNBT();
                     itemtag.setByte("Slot", (byte)i);
                     m_inventory.get( i ).writeToNBT( itemtag );
                     nbttaglist.appendTag(itemtag);
@@ -152,14 +152,14 @@ public class TilePrinter extends TilePeripheralBase
     }
 
     @Override
-    public final void readDescription( @Nonnull NBTTagCompound nbttagcompound )
+    public final void readDescription( @Nonnull CompoundNBT nbttagcompound )
     {
         super.readDescription( nbttagcompound );
         updateBlock();
     }
 
     @Override
-    public boolean shouldRefresh( World world, BlockPos pos, @Nonnull IBlockState oldState, @Nonnull IBlockState newState )
+    public boolean shouldRefresh( World world, BlockPos pos, @Nonnull BlockState oldState, @Nonnull BlockState newState )
     {
         return super.shouldRefresh( world, pos, oldState, newState ) || ComputerCraft.Blocks.peripheral.getPeripheralType( newState ) != PeripheralType.Printer;
     }
@@ -293,11 +293,11 @@ public class TilePrinter extends TilePeripheralBase
     {
         if( hasCustomName() )
         {
-            return new TextComponentString( getName() );
+            return new StringTextComponent( getName() );
         }
         else
         {
-            return new TextComponentTranslation( getName() );
+            return new TranslationTextComponent( getName() );
         }
     }
 
@@ -308,12 +308,12 @@ public class TilePrinter extends TilePeripheralBase
     }
 
     @Override    
-    public void openInventory( @Nonnull EntityPlayer player )
+    public void openInventory( @Nonnull PlayerEntity player )
     {
     }
     
     @Override    
-    public void closeInventory( @Nonnull EntityPlayer player )
+    public void closeInventory( @Nonnull PlayerEntity player )
     {
     }
 
@@ -324,7 +324,7 @@ public class TilePrinter extends TilePeripheralBase
     }
 
     @Override
-    public boolean isUsableByPlayer( @Nonnull EntityPlayer player )
+    public boolean isUsableByPlayer( @Nonnull PlayerEntity player )
     {
         return isUsable( player, false );
     }
@@ -350,7 +350,7 @@ public class TilePrinter extends TilePeripheralBase
     
     @Nonnull
     @Override
-    public int[] getSlotsForFace( @Nonnull EnumFacing side )
+    public int[] getSlotsForFace( @Nonnull Direction side )
     {
         switch( side )
         {
@@ -361,13 +361,13 @@ public class TilePrinter extends TilePeripheralBase
     }
     
     @Override
-    public boolean canInsertItem( int slot, @Nonnull ItemStack itemstack, @Nonnull EnumFacing face )
+    public boolean canInsertItem( int slot, @Nonnull ItemStack itemstack, @Nonnull Direction face )
     {
         return isItemValidForSlot( slot, itemstack );
     }
 
     @Override
-    public boolean canExtractItem( int slot, @Nonnull ItemStack itemstack, @Nonnull EnumFacing face )
+    public boolean canExtractItem( int slot, @Nonnull ItemStack itemstack, @Nonnull Direction face )
     {
         return true;
     }
@@ -375,7 +375,7 @@ public class TilePrinter extends TilePeripheralBase
     // IPeripheralTile implementation
 
     @Override
-    public IPeripheral getPeripheral( EnumFacing side )
+    public IPeripheral getPeripheral( Direction side )
     {
         return new PrinterPeripheral( this );
     }
@@ -586,7 +586,7 @@ public class TilePrinter extends TilePeripheralBase
                     double x = (double)pos.getX() + 0.5;
                     double y = (double)pos.getY() + 0.75;
                     double z = (double)pos.getZ() + 0.5;
-                    EntityItem entityitem = new EntityItem( getWorld(), x, y, z, stack );
+                    ItemEntity entityitem = new ItemEntity( getWorld(), x, y, z, stack );
                     entityitem.motionX = getWorld().rand.nextFloat() * 0.2 - 0.1;
                     entityitem.motionY = getWorld().rand.nextFloat() * 0.2 - 0.1;
                     entityitem.motionZ = getWorld().rand.nextFloat() * 0.2 - 0.1;
@@ -624,14 +624,14 @@ public class TilePrinter extends TilePeripheralBase
     }
 
     @Override
-    public boolean hasCapability( @Nonnull Capability<?> capability, @Nullable EnumFacing facing )
+    public boolean hasCapability( @Nonnull Capability<?> capability, @Nullable Direction facing )
     {
         return capability == ITEM_HANDLER_CAPABILITY || super.hasCapability( capability, facing );
     }
 
     @Nullable
     @Override
-    public <T> T getCapability( @Nonnull Capability<T> capability, @Nullable EnumFacing facing )
+    public <T> T getCapability( @Nonnull Capability<T> capability, @Nullable Direction facing )
     {
         if( capability == ITEM_HANDLER_CAPABILITY )
         {

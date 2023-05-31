@@ -31,15 +31,15 @@ import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.ItemMeshDefinition;
-import net.minecraft.client.renderer.block.model.ModelBakery;
-import net.minecraft.client.renderer.block.model.ModelResourceLocation;
+import net.minecraft.client.renderer.model.ModelBakery;
+import net.minecraft.client.renderer.model.ModelResourceLocation;
 import net.minecraft.client.renderer.color.IItemColor;
 import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumHand;
+import net.minecraft.util.Hand;
 import net.minecraft.util.IThreadListener;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
@@ -326,7 +326,7 @@ public class ComputerCraftProxyClient extends ComputerCraftProxyCommon
     }
 
     @Override
-    public Object getDiskDriveGUI( InventoryPlayer inventory, TileDiskDrive drive )
+    public Object getDiskDriveGUI( PlayerInventory inventory, TileDiskDrive drive )
     {
         return new GuiDiskDrive( inventory, drive );
     }
@@ -338,19 +338,19 @@ public class ComputerCraftProxyClient extends ComputerCraftProxyCommon
     }
 
     @Override
-    public Object getPrinterGUI( InventoryPlayer inventory, TilePrinter printer )
+    public Object getPrinterGUI( PlayerInventory inventory, TilePrinter printer )
     {
         return new GuiPrinter( inventory, printer );
     }
 
     @Override
-    public Object getTurtleGUI( InventoryPlayer inventory, TileTurtle turtle )
+    public Object getTurtleGUI( PlayerInventory inventory, TileTurtle turtle )
     {
         return new GuiTurtle( turtle.getWorld(), inventory, turtle );
     }
 
     @Override
-    public Object getPrintoutGUI( EntityPlayer player, EnumHand hand )
+    public Object getPrintoutGUI( PlayerEntity player, Hand hand )
     {
         ContainerHeldItem container = new ContainerHeldItem( player, hand );
         if( container.getStack().getItem() instanceof ItemPrintout )
@@ -361,7 +361,7 @@ public class ComputerCraftProxyClient extends ComputerCraftProxyCommon
     }
 
     @Override
-    public Object getPocketComputerGUI( EntityPlayer player, EnumHand hand )
+    public Object getPocketComputerGUI( PlayerEntity player, Hand hand )
     {
         ContainerPocketComputer container = new ContainerPocketComputer( player, hand );
         if( container.getStack().getItem() instanceof ItemPocketComputer )
@@ -378,7 +378,7 @@ public class ComputerCraftProxyClient extends ComputerCraftProxyCommon
     }
 
     @Override
-    public void handlePacket( final ComputerCraftPacket packet, final EntityPlayer player )
+    public void handlePacket( final ComputerCraftPacket packet, final PlayerEntity player )
     {
         switch( packet.m_packetType )
         {
@@ -409,7 +409,7 @@ public class ComputerCraftProxyClient extends ComputerCraftProxyCommon
         }
     }
 
-    private void processPacket( ComputerCraftPacket packet, EntityPlayer player )
+    private void processPacket( ComputerCraftPacket packet, PlayerEntity player )
     {
         switch( packet.m_packetType )
         {

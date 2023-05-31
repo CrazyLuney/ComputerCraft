@@ -14,8 +14,8 @@ import dan200.computercraft.core.apis.ILuaAPI;
 import dan200.computercraft.shared.pocket.core.PocketServerComputer;
 import dan200.computercraft.shared.util.InventoryUtil;
 import dan200.computercraft.shared.util.WorldUtil;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
 import net.minecraftforge.items.wrapper.PlayerMainInvWrapper;
@@ -73,13 +73,13 @@ public class PocketAPI implements ILuaAPI
                 // equipBack
                 return context.executeMainThreadTask( () ->
                 {
-                    if( !(m_computer.getEntity() instanceof EntityPlayer) )
+                    if( !(m_computer.getEntity() instanceof PlayerEntity) )
                     {
                         throw new LuaException( "Cannot find player" );
                     }
 
-                    EntityPlayer player = (EntityPlayer) m_computer.getEntity();
-                    InventoryPlayer inventory = player.inventory;
+                    PlayerEntity player = (PlayerEntity) m_computer.getEntity();
+                    PlayerInventory inventory = player.inventory;
 
                     IPocketUpgrade previousUpgrade = m_computer.getUpgrade();
 
@@ -116,13 +116,13 @@ public class PocketAPI implements ILuaAPI
                 // unequipBack
                 return context.executeMainThreadTask( () ->
                 {
-                    if( !(m_computer.getEntity() instanceof EntityPlayer) )
+                    if( !(m_computer.getEntity() instanceof PlayerEntity) )
                     {
                         throw new LuaException( "Cannot find player" );
                     }
 
-                    EntityPlayer player = (EntityPlayer) m_computer.getEntity();
-                    InventoryPlayer inventory = player.inventory;
+                    PlayerEntity player = (PlayerEntity) m_computer.getEntity();
+                    PlayerInventory inventory = player.inventory;
 
                     IPocketUpgrade previousUpgrade = m_computer.getUpgrade();
 

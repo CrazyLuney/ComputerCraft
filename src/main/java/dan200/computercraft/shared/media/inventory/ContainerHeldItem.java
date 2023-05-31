@@ -7,19 +7,19 @@
 package dan200.computercraft.shared.media.inventory;
 
 import dan200.computercraft.shared.util.InventoryUtil;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.Container;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.inventory.container.Container;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumHand;
+import net.minecraft.util.Hand;
 
 import javax.annotation.Nonnull;
 
 public class ContainerHeldItem extends Container
 {
     private final ItemStack m_stack;
-    private final EnumHand m_hand;
+    private final Hand m_hand;
 
-    public ContainerHeldItem( EntityPlayer player, EnumHand hand )
+    public ContainerHeldItem( PlayerEntity player, Hand hand )
     {
         m_hand = hand;
         m_stack = InventoryUtil.copyItem( player.getHeldItem( hand ) );
@@ -32,7 +32,7 @@ public class ContainerHeldItem extends Container
     }
 
     @Override
-    public boolean canInteractWith( @Nonnull EntityPlayer player )
+    public boolean canInteractWith( @Nonnull PlayerEntity player )
     {
         if( player != null && player.isEntityAlive() )
         {

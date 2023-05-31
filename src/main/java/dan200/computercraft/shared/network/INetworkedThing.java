@@ -5,9 +5,9 @@
  */
 
 package dan200.computercraft.shared.network;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 
 public interface INetworkedThing
 {
-    void handlePacket( ComputerCraftPacket packet, EntityPlayer sender );
+    void handlePacket( ComputerCraftPacket packet, PlayerEntity sender );
 }

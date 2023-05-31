@@ -10,7 +10,7 @@ import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import com.google.gson.*;
 import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.util.JsonUtils;
+import net.minecraft.util.JSONUtils;
 import net.minecraft.util.NonNullList;
 import net.minecraftforge.common.crafting.CraftingHelper;
 import net.minecraftforge.common.crafting.JsonContext;
@@ -23,7 +23,7 @@ public class RecipeUtil
     public static CraftingHelper.ShapedPrimer getPrimer( JsonContext context, JsonObject json )
     {
         Map<Character, Ingredient> ingMap = Maps.newHashMap();
-        for( Map.Entry<String, JsonElement> entry : JsonUtils.getJsonObject( json, "key" ).entrySet() )
+        for( Map.Entry<String, JsonElement> entry : JSONUtils.getJsonObject( json, "key" ).entrySet() )
         {
             if( entry.getKey().length() != 1 )
             {
@@ -39,7 +39,7 @@ public class RecipeUtil
 
         ingMap.put( ' ', Ingredient.EMPTY );
 
-        JsonArray patternJ = JsonUtils.getJsonArray( json, "pattern" );
+        JsonArray patternJ = JSONUtils.getJsonArray( json, "pattern" );
 
         if( patternJ.size() == 0 )
             throw new JsonSyntaxException( "Invalid pattern: empty pattern not allowed" );
@@ -47,7 +47,7 @@ public class RecipeUtil
         String[] pattern = new String[ patternJ.size() ];
         for( int x = 0; x < pattern.length; ++x )
         {
-            String line = JsonUtils.getString( patternJ.get( x ), "pattern[" + x + "]" );
+            String line = JSONUtils.getString( patternJ.get( x ), "pattern[" + x + "]" );
             if( x > 0 && pattern[ 0 ].length() != line.length() )
             {
                 throw new JsonSyntaxException( "Invalid pattern: each row must  be the same width" );
@@ -90,7 +90,7 @@ public class RecipeUtil
     public static NonNullList<Ingredient> getIngredients( JsonContext context, JsonObject json )
     {
         NonNullList<Ingredient> ings = NonNullList.create();
-        for( JsonElement ele : JsonUtils.getJsonArray( json, "ingredients" ) )
+        for( JsonElement ele : JSONUtils.getJsonArray( json, "ingredients" ) )
         {
             ings.add( CraftingHelper.getIngredient( ele, context ) );
         }

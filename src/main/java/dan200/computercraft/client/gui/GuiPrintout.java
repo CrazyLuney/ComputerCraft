@@ -11,14 +11,14 @@ import dan200.computercraft.core.terminal.TextBuffer;
 import dan200.computercraft.shared.media.inventory.ContainerHeldItem;
 import dan200.computercraft.shared.media.items.ItemPrintout;
 import dan200.computercraft.shared.util.Palette;
-import net.minecraft.client.gui.inventory.GuiContainer;
+import net.minecraft.client.gui.screen.inventory.ContainerScreen;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.util.ResourceLocation;
 import org.lwjgl.input.Mouse;
 
 import java.io.IOException;
 
-public class GuiPrintout extends GuiContainer
+public class GuiPrintout extends ContainerScreen
 {
     private static final ResourceLocation background = new ResourceLocation( "computercraft", "textures/gui/printout.png" );
     

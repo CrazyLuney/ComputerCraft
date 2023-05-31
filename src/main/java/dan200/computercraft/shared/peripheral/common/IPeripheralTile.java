@@ -9,11 +9,11 @@ package dan200.computercraft.shared.peripheral.common;
 import dan200.computercraft.api.peripheral.IPeripheral;
 import dan200.computercraft.shared.common.IDirectionalTile;
 import dan200.computercraft.shared.peripheral.PeripheralType;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.util.Direction;
 
 public interface IPeripheralTile extends IDirectionalTile
 {
     PeripheralType getPeripheralType();
-    IPeripheral getPeripheral( EnumFacing side );
+    IPeripheral getPeripheral( Direction side );
     String getLabel();
 }

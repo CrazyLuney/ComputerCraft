@@ -3,7 +3,7 @@ package dan200.computercraft.shared.common;
 import dan200.computercraft.shared.util.Colour;
 import dan200.computercraft.shared.util.ColourTracker;
 import dan200.computercraft.shared.util.ColourUtils;
-import net.minecraft.inventory.InventoryCrafting;
+import net.minecraft.inventory.CraftingInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.util.NonNullList;
@@ -16,7 +16,7 @@ import javax.annotation.Nonnull;
 public class ColourableRecipe extends IForgeRegistryEntry.Impl<IRecipe> implements IRecipe
 {
     @Override
-    public boolean matches( @Nonnull InventoryCrafting inv, @Nonnull World worldIn )
+    public boolean matches( @Nonnull CraftingInventory inv, @Nonnull World worldIn )
     {
         boolean hasColourable = false;
         boolean hasDye = false;
@@ -45,7 +45,7 @@ public class ColourableRecipe extends IForgeRegistryEntry.Impl<IRecipe> implemen
 
     @Nonnull
     @Override
-    public ItemStack getCraftingResult( @Nonnull InventoryCrafting inv )
+    public ItemStack getCraftingResult( @Nonnull CraftingInventory inv )
     {
         ItemStack colourable = ItemStack.EMPTY;
 
@@ -100,7 +100,7 @@ public class ColourableRecipe extends IForgeRegistryEntry.Impl<IRecipe> implemen
 
     @Nonnull
     @Override
-    public NonNullList<ItemStack> getRemainingItems( @Nonnull InventoryCrafting inventoryCrafting )
+    public NonNullList<ItemStack> getRemainingItems( @Nonnull CraftingInventory inventoryCrafting )
     {
         NonNullList<ItemStack> results = NonNullList.withSize( inventoryCrafting.getSizeInventory(), ItemStack.EMPTY );
         for( int i = 0; i < results.size(); ++i )

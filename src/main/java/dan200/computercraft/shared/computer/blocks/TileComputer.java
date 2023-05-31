@@ -11,11 +11,11 @@ import dan200.computercraft.shared.computer.core.ComputerFamily;
 import dan200.computercraft.shared.computer.core.IComputer;
 import dan200.computercraft.shared.computer.core.ServerComputer;
 import dan200.computercraft.shared.computer.items.ComputerItemFactory;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.block.BlockState;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.util.Direction;
 import net.minecraft.util.NonNullList;
 
 import javax.annotation.Nonnull;
@@ -65,19 +65,19 @@ public class TileComputer extends TileComputerBase
     }
 
     @Override
-    public void openGUI( EntityPlayer player )
+    public void openGUI( PlayerEntity player )
     {
         ComputerCraft.openComputerGUI( player, this );
     }
 
     @Override
-    public final void readDescription( @Nonnull NBTTagCompound nbttagcompound )
+    public final void readDescription( @Nonnull CompoundNBT nbttagcompound )
     {
         super.readDescription( nbttagcompound );
         updateBlock();
     }
 
-    public boolean isUseableByPlayer( EntityPlayer player )
+    public boolean isUseableByPlayer( PlayerEntity player )
     {
         return isUsable( player, false );
     }
@@ -85,18 +85,18 @@ public class TileComputer extends TileComputerBase
     // IDirectionalTile
 
     @Override
-    public EnumFacing getDirection()
+    public Direction getDirection()
     {
-        IBlockState state = getBlockState();
+        BlockState state = getBlockState();
         return state.getValue( BlockComputer.Properties.FACING );
     }
 
     @Override
-    public void setDirection( EnumFacing dir )
+    public void setDirection( Direction dir )
     {
-        if( dir.getAxis() == EnumFacing.Axis.Y )
+        if( dir.getAxis() == Direction.Axis.Y )
         {
-            dir = EnumFacing.NORTH;
+            dir = Direction.NORTH;
         }
         setBlockState( getBlockState().withProperty( BlockComputer.Properties.FACING, dir ) );
         updateInput();

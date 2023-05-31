@@ -7,7 +7,7 @@
 package dan200.computercraft.shared.network;
 
 import dan200.computercraft.ComputerCraft;
-import net.minecraft.network.NetHandlerPlayServer;
+import net.minecraft.network.play.ServerPlayNetHandler;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.network.FMLNetworkEvent;
 
@@ -35,7 +35,7 @@ public class PacketHandler
         {
             ComputerCraftPacket packet = new ComputerCraftPacket();
             packet.fromBytes( event.getPacket().payload() );
-            ComputerCraft.handlePacket( packet, ((NetHandlerPlayServer)event.getHandler()).player );
+            ComputerCraft.handlePacket( packet, ((ServerPlayNetHandler)event.getHandler()).player );
         }
         catch( Exception e )
         {

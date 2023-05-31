@@ -10,8 +10,8 @@ import dan200.computercraft.api.peripheral.IPeripheral;
 import dan200.computercraft.shared.common.BlockGeneric;
 import dan200.computercraft.shared.peripheral.common.TilePeripheralBase;
 import net.minecraft.block.Block;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.util.Direction;
 import net.minecraft.util.math.AxisAlignedBB;
 
 import javax.annotation.Nonnull;
@@ -55,7 +55,7 @@ public abstract class TileModemBase extends TilePeripheralBase
     @Override
     public void onNeighbourChange()
     {
-        EnumFacing dir = getDirection();
+        Direction dir = getDirection();
         if( !getWorld().isSideSolid(
             getPos().offset( dir ),
             dir.getOpposite()
@@ -98,7 +98,7 @@ public abstract class TileModemBase extends TilePeripheralBase
     }
 
     @Override
-    public final void readDescription( @Nonnull NBTTagCompound nbttagcompound )
+    public final void readDescription( @Nonnull CompoundNBT nbttagcompound )
     {
         super.readDescription( nbttagcompound );
         updateBlock();
@@ -107,7 +107,7 @@ public abstract class TileModemBase extends TilePeripheralBase
     // IPeripheralTile implementation
 
     @Override
-    public IPeripheral getPeripheral( EnumFacing side )
+    public IPeripheral getPeripheral( Direction side )
     {
         if( side == getDirection() )
         {

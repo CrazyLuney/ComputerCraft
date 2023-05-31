@@ -9,14 +9,14 @@ package dan200.computercraft.shared.media.items;
 import dan200.computercraft.ComputerCraft;
 import dan200.computercraft.api.filesystem.IMount;
 import dan200.computercraft.api.media.IMedia;
-import net.minecraft.item.ItemRecord;
+import net.minecraft.item.MusicDiscItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.world.World;
 
 import javax.annotation.Nonnull;
 
-// An implementation of IMedia for ItemRecord's
+// An implementation of IMedia for MusicDiscItem's
 public class RecordMedia implements IMedia
 {
     public RecordMedia()
@@ -44,7 +44,7 @@ public class RecordMedia implements IMedia
     @Override
     public SoundEvent getAudio( @Nonnull ItemStack stack )
     {
-        ItemRecord itemRecord = (ItemRecord)stack.getItem();
+        MusicDiscItem itemRecord = (MusicDiscItem)stack.getItem();
         return itemRecord.sound;
     }
     

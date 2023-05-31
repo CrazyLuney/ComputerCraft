@@ -14,23 +14,23 @@ import dan200.computercraft.shared.turtle.blocks.TileTurtle;
 import dan200.computercraft.shared.turtle.entity.TurtleVisionCamera;
 import dan200.computercraft.shared.util.Holiday;
 import dan200.computercraft.shared.util.HolidayUtil;
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.BlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.block.model.BakedQuad;
-import net.minecraft.client.renderer.block.model.IBakedModel;
-import net.minecraft.client.renderer.block.model.ModelManager;
-import net.minecraft.client.renderer.block.model.ModelResourceLocation;
-import net.minecraft.client.renderer.entity.RenderManager;
-import net.minecraft.client.renderer.texture.TextureMap;
-import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
+import net.minecraft.client.renderer.model.BakedQuad;
+import net.minecraft.client.renderer.model.IBakedModel;
+import net.minecraft.client.renderer.model.ModelManager;
+import net.minecraft.client.renderer.model.ModelResourceLocation;
+import net.minecraft.client.renderer.entity.EntityRendererManager;
+import net.minecraft.client.renderer.texture.AtlasTexture;
+import net.minecraft.client.renderer.tileentity.TileEntityRenderer;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.client.renderer.vertex.VertexFormat;
 import net.minecraft.entity.Entity;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.util.Direction;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
@@ -43,7 +43,7 @@ import org.lwjgl.opengl.GL11;
 import javax.vecmath.Matrix4f;
 import java.util.List;
 
-public class TileEntityTurtleRenderer extends TileEntitySpecialRenderer<TileTurtle>
+public class TileEntityTurtleRenderer extends TileEntityRenderer<TileTurtle>
 {
     private static ModelResourceLocation NORMAL_TURTLE_MODEL = new ModelResourceLocation( "computercraft:turtle", "inventory" );
     private static ModelResourceLocation ADVANCED_TURTLE_MODEL = new ModelResourceLocation( "computercraft:turtle_advanced", "inventory" );
@@ -109,7 +109,7 @@ public class TileEntityTurtleRenderer extends TileEntitySpecialRenderer<TileTurt
 
     private void renderTurtleAt( TileTurtle turtle, double posX, double posY, double posZ, float f, int i )
     {
-        IBlockState state = turtle.getWorld().getBlockState( turtle.getPos() );
+        BlockState state = turtle.getWorld().getBlockState( turtle.getPos() );
         GlStateManager.pushMatrix();
         try
         {
@@ -195,7 +195,7 @@ public class TileEntityTurtleRenderer extends TileEntitySpecialRenderer<TileTurt
         }
     }
 
-    private void renderUpgrade( IBlockState state, TileTurtle turtle, TurtleSide side, float f )
+    private void renderUpgrade( BlockState state, TileTurtle turtle, TurtleSide side, float f )
     {
         ITurtleUpgrade upgrade = turtle.getUpgrade( side );
         if( upgrade != null )
@@ -228,20 +228,20 @@ public class TileEntityTurtleRenderer extends TileEntitySpecialRenderer<TileTurt
         }
     }
 
-    private void renderModel( IBlockState state, ModelResourceLocation modelLocation, int[] tints )
+    private void renderModel( BlockState state, ModelResourceLocation modelLocation, int[] tints )
     {
         Minecraft mc = Minecraft.getMinecraft();
         ModelManager modelManager = mc.getRenderItem().getItemModelMesher().getModelManager();
         renderModel( state, modelManager.getModel( modelLocation ), tints );
     }
 
-    private void renderModel( IBlockState state, IBakedModel model, int[] tints )
+    private void renderModel( BlockState state, IBakedModel model, int[] tints )
     {
         Minecraft mc = Minecraft.getMinecraft();
         Tessellator tessellator = Tessellator.getInstance();
-        mc.getTextureManager().bindTexture( TextureMap.LOCATION_BLOCKS_TEXTURE );
+        mc.getTextureManager().bindTexture( AtlasTexture.LOCATION_BLOCKS_TEXTURE );
         renderQuads( tessellator, model.getQuads( state, null, 0 ), tints );
-        for( EnumFacing facing : EnumFacing.VALUES )
+        for( Direction facing : Direction.VALUES )
         {
             renderQuads( tessellator, model.getQuads( state, facing, 0 ), tints );
         }
@@ -280,7 +280,7 @@ public class TileEntityTurtleRenderer extends TileEntitySpecialRenderer<TileTurt
         RayTraceResult mop = mc.objectMouseOver;
         if( mop != null && mop.typeOfHit == RayTraceResult.Type.BLOCK && mop.getBlockPos().equals( position ) )
         {
-            RenderManager renderManager = mc.getRenderManager();
+            EntityRendererManager renderManager = mc.getRenderManager();
             FontRenderer fontrenderer = renderManager.getFontRenderer();
             float scale = 0.016666668F * 1.6f;
 

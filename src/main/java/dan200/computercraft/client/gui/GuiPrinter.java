@@ -8,20 +8,20 @@ package dan200.computercraft.client.gui;
 
 import dan200.computercraft.shared.peripheral.printer.ContainerPrinter;
 import dan200.computercraft.shared.peripheral.printer.TilePrinter;
-import net.minecraft.client.gui.inventory.GuiContainer;
+import net.minecraft.client.gui.screen.inventory.ContainerScreen;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.resources.I18n;
-import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.util.ResourceLocation;
 
-public class GuiPrinter extends GuiContainer
+public class GuiPrinter extends ContainerScreen
 {
     private static final ResourceLocation background = new ResourceLocation( "computercraft", "textures/gui/printer.png" );
     
     private TilePrinter m_printer;
     private ContainerPrinter m_container;
 
-    public GuiPrinter(InventoryPlayer inventoryplayer, TilePrinter printer)
+    public GuiPrinter(PlayerInventory inventoryplayer, TilePrinter printer)
     {
         super(new ContainerPrinter(inventoryplayer, printer));
         m_printer = printer;

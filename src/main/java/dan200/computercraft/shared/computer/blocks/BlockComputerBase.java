@@ -10,11 +10,11 @@ import dan200.computercraft.shared.common.BlockDirectional;
 import dan200.computercraft.shared.computer.core.ComputerFamily;
 import dan200.computercraft.shared.computer.items.ItemComputerBase;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.BlockState;
 import net.minecraft.item.Item;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.util.Direction;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
@@ -26,33 +26,33 @@ public abstract class BlockComputerBase extends BlockDirectional
     }
 
     @Override
-    public void onBlockAdded( World world, BlockPos pos, IBlockState state )
+    public void onBlockAdded( World world, BlockPos pos, BlockState state )
     {
         super.onBlockAdded( world, pos, state );
         updateInput( world, pos );
     }
 
     @Override
-    public void setDirection( World world, BlockPos pos, EnumFacing dir )
+    public void setDirection( World world, BlockPos pos, Direction dir )
     {
         super.setDirection( world, pos, dir );
         updateInput( world, pos );
     }
 
-    protected abstract IBlockState getDefaultBlockState( ComputerFamily family, EnumFacing placedSide );
+    protected abstract BlockState getDefaultBlockState( ComputerFamily family, Direction placedSide );
     protected abstract ComputerFamily getFamily( int damage );
-    protected abstract ComputerFamily getFamily( IBlockState state );
+    protected abstract ComputerFamily getFamily( BlockState state );
     protected abstract TileComputerBase createTile( ComputerFamily family );
 
     @Override
-    protected final IBlockState getDefaultBlockState( int damage, EnumFacing placedSide )
+    protected final BlockState getDefaultBlockState( int damage, Direction placedSide )
     {
         ItemComputerBase item = (ItemComputerBase)Item.getItemFromBlock( this );
         return getDefaultBlockState( item.getFamily( damage ), placedSide );
     }
 
     @Override
-    public final TileComputerBase createTile( IBlockState state )
+    public final TileComputerBase createTile( BlockState state )
     {
         return createTile( getFamily( state ) );
     }

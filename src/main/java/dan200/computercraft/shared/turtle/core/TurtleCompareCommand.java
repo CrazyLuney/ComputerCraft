@@ -11,10 +11,10 @@ import dan200.computercraft.api.turtle.ITurtleCommand;
 import dan200.computercraft.api.turtle.TurtleCommandResult;
 import dan200.computercraft.shared.util.WorldUtil;
 import net.minecraft.block.Block;
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.BlockState;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.util.Direction;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -37,7 +37,7 @@ public class TurtleCompareCommand implements ITurtleCommand
     public TurtleCommandResult execute( @Nonnull ITurtleAccess turtle )
     {
         // Get world direction from direction
-        EnumFacing direction = m_direction.toWorldDir( turtle );
+        Direction direction = m_direction.toWorldDir( turtle );
 
         // Get currently selected stack
         ItemStack selectedStack = turtle.getInventory().getStackInSlot( turtle.getSelectedSlot() );
@@ -52,7 +52,7 @@ public class TurtleCompareCommand implements ITurtleCommand
         {
             if( !world.isAirBlock( newPosition ) )
             {
-                IBlockState lookAtState = world.getBlockState( newPosition );
+                BlockState lookAtState = world.getBlockState( newPosition );
                 Block lookAtBlock = lookAtState.getBlock();
                 if( !lookAtBlock.isAir( lookAtState, world, newPosition ) )
                 {
@@ -64,7 +64,7 @@ public class TurtleCompareCommand implements ITurtleCommand
                             Method method = ReflectionHelper.findMethod(
                                 Block.class,
                                 "func_180643_i", "getSilkTouchDrop",
-                                IBlockState.class
+                                BlockState.class
                             );
                             lookAtStack = (ItemStack) method.invoke( lookAtBlock, lookAtState );
                         }

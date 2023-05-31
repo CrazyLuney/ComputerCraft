@@ -11,9 +11,9 @@ import dan200.computercraft.shared.peripheral.PeripheralType;
 import dan200.computercraft.shared.peripheral.modem.TileCable;
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.block.BlockState;
+import net.minecraft.item.ItemGroup;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.*;
@@ -61,7 +61,7 @@ public class ItemCable extends ItemPeripheralBase
     }
 
     @Override
-    public void getSubItems( @Nullable CreativeTabs tabs, @Nonnull NonNullList<ItemStack> list )
+    public void getSubItems( @Nullable ItemGroup tabs, @Nonnull NonNullList<ItemStack> list )
     {
         if( !isInCreativeTab( tabs ) ) return;
         list.add( PeripheralItemFactory.create( PeripheralType.WiredModem, null, 1 ) );
@@ -70,18 +70,18 @@ public class ItemCable extends ItemPeripheralBase
 
     @Nonnull
     @Override
-    public EnumActionResult onItemUse( @Nonnull EntityPlayer player, World world, @Nonnull BlockPos pos, @Nonnull EnumHand hand, @Nonnull EnumFacing side, float fx, float fy, float fz )
+    public ActionResultType onItemUse( @Nonnull PlayerEntity player, World world, @Nonnull BlockPos pos, @Nonnull Hand hand, @Nonnull Direction side, float fx, float fy, float fz )
     {
         ItemStack stack = player.getHeldItem( hand );
         if( !canPlaceBlockOnSide( world, pos, side, player, stack ) )
         {
-            return EnumActionResult.FAIL;
+            return ActionResultType.FAIL;
         }
 
         // Try to add a cable to a modem
         PeripheralType type = getPeripheralType( stack );
         Block existing = world.getBlockState( pos ).getBlock();
-        IBlockState existingState = world.getBlockState( pos );
+        BlockState existingState = world.getBlockState( pos );
         if( existing == ComputerCraft.Blocks.cable )
         {
             PeripheralType existingType = ComputerCraft.Blocks.cable.getPeripheralType( world, pos );
@@ -89,7 +89,7 @@ public class ItemCable extends ItemPeripheralBase
             {
                 if( !stack.isEmpty() )
                 {
-                    IBlockState newState = existingState.withProperty( BlockCable.Properties.CABLE, true );
+                    BlockState newState = existingState.withProperty( BlockCable.Properties.CABLE, true );
                     world.setBlockState( pos, newState, 3 );
                     SoundType soundType = newState.getBlock().getSoundType( newState, world, pos, player );
                     world.playSound( null, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, soundType.getPlaceSound(), SoundCategory.BLOCKS, (soundType.getVolume() + 1.0F) / 2.0F, soundType.getPitch() * 0.8F );
@@ -101,9 +101,9 @@ public class ItemCable extends ItemPeripheralBase
                         TileCable cable = (TileCable)tile;
                         cable.networkChanged();
                     }
-                    return EnumActionResult.SUCCESS;
+                    return ActionResultType.SUCCESS;
                 }
-                return EnumActionResult.FAIL;
+                return ActionResultType.FAIL;
             }
         }
 
@@ -112,7 +112,7 @@ public class ItemCable extends ItemPeripheralBase
         {
             BlockPos offset = pos.offset( side );
             Block offsetExisting = world.getBlockState( offset ).getBlock();
-            IBlockState offsetExistingState = world.getBlockState( offset );
+            BlockState offsetExistingState = world.getBlockState( offset );
             if( offsetExisting == ComputerCraft.Blocks.cable )
             {
                 // Try to add a modem to a cable
@@ -121,7 +121,7 @@ public class ItemCable extends ItemPeripheralBase
                 {
                     if( !stack.isEmpty() )
                     {
-                        IBlockState newState = offsetExistingState.withProperty( BlockCable.Properties.MODEM, BlockCableModemVariant.fromFacing( side.getOpposite() ) );
+                        BlockState newState = offsetExistingState.withProperty( BlockCable.Properties.MODEM, BlockCableModemVariant.fromFacing( side.getOpposite() ) );
                         world.setBlockState( offset, newState, 3 );
                         SoundType soundType = newState.getBlock().getSoundType( newState, world, offset, player );
                         world.playSound( null, offset.getX() + 0.5, offset.getY() + 0.5, offset.getZ() + 0.5, soundType.getPlaceSound(), SoundCategory.BLOCKS, (soundType.getVolume() + 1.0F) / 2.0F, soundType.getPitch() * 0.8F );
@@ -133,9 +133,9 @@ public class ItemCable extends ItemPeripheralBase
                             TileCable cable = (TileCable)tile;
                             cable.networkChanged();
                         }
-                        return EnumActionResult.SUCCESS;
+                        return ActionResultType.SUCCESS;
                     }
-                    return EnumActionResult.FAIL;
+                    return ActionResultType.FAIL;
                 }
 
                 // Try to add a cable to a modem
@@ -143,7 +143,7 @@ public class ItemCable extends ItemPeripheralBase
                 {
                     if( !stack.isEmpty() )
                     {
-                        IBlockState newState = offsetExistingState.withProperty( BlockCable.Properties.CABLE, true );
+                        BlockState newState = offsetExistingState.withProperty( BlockCable.Properties.CABLE, true );
                         world.setBlockState( offset, newState, 3 );
                         SoundType soundType = newState.getBlock().getSoundType( newState, world, offset, player );
                         world.playSound( null, offset.getX() + 0.5, offset.getY() + 0.5, offset.getZ() + 0.5, soundType.getPlaceSound(), SoundCategory.BLOCKS, (soundType.getVolume() + 1.0F) / 2.0F, soundType.getPitch() * 0.8F );
@@ -155,9 +155,9 @@ public class ItemCable extends ItemPeripheralBase
                             TileCable cable = (TileCable)tile;
                             cable.networkChanged();
                         }
-                        return EnumActionResult.SUCCESS;
+                        return ActionResultType.SUCCESS;
                     }
-                    return EnumActionResult.FAIL;
+                    return ActionResultType.FAIL;
                 }
             }
         }

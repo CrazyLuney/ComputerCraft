@@ -8,16 +8,16 @@ package dan200.computercraft.shared.peripheral.common;
 
 import dan200.computercraft.shared.peripheral.PeripheralType;
 import net.minecraft.block.Block;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemBlock;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.BlockItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.util.Direction;
 import net.minecraft.world.World;
 
 import javax.annotation.Nonnull;
 
-public abstract class ItemPeripheralBase extends ItemBlock implements IPeripheralItem
+public abstract class ItemPeripheralBase extends BlockItem implements IPeripheralItem
 {
     protected ItemPeripheralBase( Block block )
     {
@@ -35,7 +35,7 @@ public abstract class ItemPeripheralBase extends ItemBlock implements IPeriphera
     }
 
     @Override
-    public boolean canPlaceBlockOnSide( World world, @Nonnull BlockPos pos, @Nonnull EnumFacing side, EntityPlayer player, @Nonnull ItemStack stack ) // canPlaceItemBlockOnSide
+    public boolean canPlaceBlockOnSide( World world, @Nonnull BlockPos pos, @Nonnull Direction side, PlayerEntity player, @Nonnull ItemStack stack ) // canPlaceItemBlockOnSide
     {
         PeripheralType type = getPeripheralType( stack );
         switch( type )

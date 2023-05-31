@@ -7,7 +7,7 @@
 package dan200.computercraft.shared.util;
 
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.item.EntityItem;
+import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.*;
 import net.minecraft.util.math.*;
@@ -29,7 +29,7 @@ public class WorldUtil
         return isBlockInWorld( world, pos ) && world.getBlockState( pos ).getMaterial().isLiquid();
     }
 
-    public static BlockPos moveCoords( BlockPos pos, EnumFacing dir )
+    public static BlockPos moveCoords( BlockPos pos, Direction dir )
     {
         return pos.offset( dir );
     }
@@ -118,7 +118,7 @@ public class WorldUtil
         dropItemStack( stack, world, pos, null );
     }
 
-    public static void dropItemStack( @Nonnull ItemStack stack, World world, BlockPos pos, EnumFacing direction )
+    public static void dropItemStack( @Nonnull ItemStack stack, World world, BlockPos pos, Direction direction )
     {
         double xDir;
         double yDir;
@@ -149,7 +149,7 @@ public class WorldUtil
 
     public static void dropItemStack( @Nonnull ItemStack stack, World world, double xPos, double yPos, double zPos, double xDir, double yDir, double zDir )
     {
-        EntityItem entityItem = new EntityItem( world, xPos, yPos, zPos, stack.copy() );
+        ItemEntity entityItem = new ItemEntity( world, xPos, yPos, zPos, stack.copy() );
         entityItem.motionX = xDir * 0.7 + world.rand.nextFloat() * 0.2 - 0.1;
         entityItem.motionY = yDir * 0.7 + world.rand.nextFloat() * 0.2 - 0.1;
         entityItem.motionZ = zDir * 0.7 + world.rand.nextFloat() * 0.2 - 0.1;

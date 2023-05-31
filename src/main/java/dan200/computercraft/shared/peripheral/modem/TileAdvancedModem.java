@@ -7,9 +7,9 @@
 package dan200.computercraft.shared.peripheral.modem;
 
 import dan200.computercraft.api.peripheral.IPeripheral;
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.BlockState;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.util.Direction;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
@@ -63,15 +63,15 @@ public class TileAdvancedModem extends TileModemBase
     }
 
     @Override
-    public EnumFacing getDirection()
+    public Direction getDirection()
     {
         // Wireless Modem
-        IBlockState state = getBlockState();
+        BlockState state = getBlockState();
         return state.getValue( BlockAdvancedModem.Properties.FACING );
     }
 
     @Override
-    public void setDirection( EnumFacing dir )
+    public void setDirection( Direction dir )
     {
         // Wireless Modem
         setBlockState( getBlockState()

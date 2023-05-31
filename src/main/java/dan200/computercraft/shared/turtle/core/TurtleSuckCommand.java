@@ -13,9 +13,9 @@ import dan200.computercraft.api.turtle.TurtleCommandResult;
 import dan200.computercraft.shared.util.InventoryUtil;
 import dan200.computercraft.shared.util.WorldUtil;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.item.EntityItem;
+import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.util.Direction;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -47,13 +47,13 @@ public class TurtleSuckCommand implements ITurtleCommand
         }
 
         // Get world direction from direction
-        EnumFacing direction = m_direction.toWorldDir( turtle );
+        Direction direction = m_direction.toWorldDir( turtle );
 
         // Get inventory for thing in front
         World world = turtle.getWorld();
         BlockPos oldPosition = turtle.getPosition();
         BlockPos newPosition = WorldUtil.moveCoords( oldPosition, direction );
-        EnumFacing side = direction.getOpposite();
+        Direction side = direction.getOpposite();
 
         IItemHandler inventory = InventoryUtil.getInventory( world, newPosition, side );
         if( inventory != null )
@@ -97,11 +97,11 @@ public class TurtleSuckCommand implements ITurtleCommand
                 boolean storedItems = false;
                 for( Entity entity : list )
                 {
-                    if( entity != null && entity instanceof EntityItem && !entity.isDead )
+                    if( entity != null && entity instanceof ItemEntity && !entity.isDead )
                     {
                         // Suck up the item
                         foundItems = true;
-                        EntityItem entityItem = (EntityItem) entity;
+                        ItemEntity entityItem = (ItemEntity) entity;
                         ItemStack stack = entityItem.getItem().copy();
                         ItemStack storeStack;
                         ItemStack leaveStack;

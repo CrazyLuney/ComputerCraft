@@ -11,7 +11,7 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
@@ -46,7 +46,7 @@ public class InventoryUtil
 
     // Methods for finding inventories:
 
-    public static IItemHandler getInventory( World world, BlockPos pos, EnumFacing side )
+    public static IItemHandler getInventory( World world, BlockPos pos, Direction side )
     {
         // Look for tile with inventory
         int y = pos.getY();
@@ -77,7 +77,7 @@ public class InventoryUtil
             pos.getY() + 0.5 + 0.6 * side.getFrontOffsetY(),
             pos.getZ() + 0.5 + 0.6 * side.getFrontOffsetZ()
         );
-        EnumFacing dir = side.getOpposite();
+        Direction dir = side.getOpposite();
         Vec3d vecDir = new Vec3d(
             dir.getFrontOffsetX(), dir.getFrontOffsetY(), dir.getFrontOffsetZ()
         );

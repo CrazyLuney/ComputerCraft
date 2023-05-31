@@ -8,27 +8,27 @@ package dan200.computercraft.shared.util;
 
 import dan200.computercraft.ComputerCraft;
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockRedstoneWire;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.init.Blocks;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.block.RedstoneWireBlock;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
+import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 public class RedstoneUtil
 {
-    public static int getRedstoneOutput( World world, BlockPos pos, EnumFacing side )
+    public static int getRedstoneOutput( World world, BlockPos pos, Direction side )
     {
         int power = 0;
-        IBlockState state = world.getBlockState( pos );
+        BlockState state = world.getBlockState( pos );
         Block block =   state.getBlock();
         if( block != Blocks.AIR )
         {
             if( block == Blocks.REDSTONE_WIRE )
             {
-                if( side != EnumFacing.UP )
+                if( side != Direction.UP )
                 {
-                    power = state.getValue( BlockRedstoneWire.POWER );
+                    power = state.getValue( RedstoneWireBlock.POWER );
                 }
                 else
                 {
@@ -41,12 +41,12 @@ public class RedstoneUtil
             }
             if( block.isNormalCube( state, world, pos ) )
             {
-                for( EnumFacing testSide : EnumFacing.VALUES )
+                for( Direction testSide : Direction.VALUES )
                 {
                     if( testSide != side )
                     {
                         BlockPos testPos = pos.offset( testSide );
-                        IBlockState neighbour = world.getBlockState( testPos );
+                        BlockState neighbour = world.getBlockState( testPos );
                         if( neighbour.canProvidePower( ) )
                         {
                             power = Math.max( power, neighbour.getStrongPower( world, testPos, testSide.getOpposite() ) );
@@ -58,7 +58,7 @@ public class RedstoneUtil
         return power;
     }
 
-    public static int getBundledRedstoneOutput( World world, BlockPos pos, EnumFacing side )
+    public static int getBundledRedstoneOutput( World world, BlockPos pos, Direction side )
     {
         int signal = ComputerCraft.getBundledRedstoneOutput( world, pos, side );
         if( signal >= 0 )
@@ -68,12 +68,12 @@ public class RedstoneUtil
         return 0;
     }
 
-    public static void propagateRedstoneOutput( World world, BlockPos pos, EnumFacing side )
+    public static void propagateRedstoneOutput( World world, BlockPos pos, Direction side )
     {
         // Propagate ordinary output
-        IBlockState block = world.getBlockState( pos );
+        BlockState block = world.getBlockState( pos );
         BlockPos neighbourPos = pos.offset( side );
-        IBlockState neighbour = world.getBlockState( neighbourPos );
+        BlockState neighbour = world.getBlockState( neighbourPos );
         if( neighbour.getBlock() != Blocks.AIR )
         {
             world.neighborChanged( neighbourPos, block.getBlock(), pos );

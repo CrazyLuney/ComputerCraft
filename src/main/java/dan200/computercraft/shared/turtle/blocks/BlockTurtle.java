@@ -15,13 +15,13 @@ import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyDirection;
 import net.minecraft.block.state.BlockFaceShape;
 import net.minecraft.block.state.BlockStateContainer;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.block.BlockState;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.EnumBlockRenderType;
+import net.minecraft.block.BlockRenderType;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.util.Direction;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
@@ -33,7 +33,7 @@ public class BlockTurtle extends BlockComputerBase
 
     public static class Properties
     {
-        public static final PropertyDirection FACING = PropertyDirection.create( "facing", EnumFacing.Plane.HORIZONTAL );
+        public static final PropertyDirection FACING = PropertyDirection.create( "facing", Direction.Plane.HORIZONTAL );
     }
 
     public static BlockTurtle createTurtleBlock()
@@ -50,28 +50,28 @@ public class BlockTurtle extends BlockComputerBase
         setUnlocalizedName( "computercraft:turtle" );
         setCreativeTab( ComputerCraft.mainCreativeTab );
         setDefaultState( this.blockState.getBaseState()
-            .withProperty( Properties.FACING, EnumFacing.NORTH )
+            .withProperty( Properties.FACING, Direction.NORTH )
         );
     }
 
     @Nonnull
     @Override
     @Deprecated
-    public EnumBlockRenderType getRenderType( IBlockState state )
+    public BlockRenderType getRenderType( BlockState state )
     {
-        return EnumBlockRenderType.INVISIBLE;
+        return BlockRenderType.INVISIBLE;
     }
 
     @Override
     @Deprecated
-    public boolean isOpaqueCube( IBlockState state )
+    public boolean isOpaqueCube( BlockState state )
     {
         return false;
     }
 
     @Override
     @Deprecated
-    public boolean isFullCube( IBlockState state )
+    public boolean isFullCube( BlockState state )
     {
         return false;
     }
@@ -79,7 +79,7 @@ public class BlockTurtle extends BlockComputerBase
     @Nonnull
     @Override
     @Deprecated
-    public BlockFaceShape getBlockFaceShape( IBlockAccess world, IBlockState state, BlockPos pos, EnumFacing side )
+    public BlockFaceShape getBlockFaceShape( IBlockAccess world, BlockState state, BlockPos pos, Direction side )
     {
         return BlockFaceShape.UNDEFINED;
     }
@@ -94,13 +94,13 @@ public class BlockTurtle extends BlockComputerBase
     @Nonnull
     @Override
     @Deprecated
-    public IBlockState getStateFromMeta( int meta )
+    public BlockState getStateFromMeta( int meta )
     {
         return getDefaultState();
     }
 
     @Override
-    public int getMetaFromState( IBlockState state )
+    public int getMetaFromState( BlockState state )
     {
         return 0;
     }
@@ -108,13 +108,13 @@ public class BlockTurtle extends BlockComputerBase
     @Nonnull
     @Override
     @Deprecated
-    public IBlockState getActualState( @Nonnull IBlockState state, IBlockAccess world, BlockPos pos )
+    public BlockState getActualState( @Nonnull BlockState state, IBlockAccess world, BlockPos pos )
     {
         return state.withProperty( Properties.FACING, getDirection( world, pos ) );
     }
 
     @Override
-    protected IBlockState getDefaultBlockState( ComputerFamily family, EnumFacing placedSide )
+    protected BlockState getDefaultBlockState( ComputerFamily family, Direction placedSide )
     {
         return getDefaultState();
     }
@@ -138,7 +138,7 @@ public class BlockTurtle extends BlockComputerBase
     }
 
     @Override
-    public ComputerFamily getFamily( IBlockState state )
+    public ComputerFamily getFamily( BlockState state )
     {
         return getFamily();
     }
@@ -161,7 +161,7 @@ public class BlockTurtle extends BlockComputerBase
     }
 
     @Override
-    public void onBlockPlacedBy( World world, BlockPos pos, IBlockState state, EntityLivingBase player, @Nonnull ItemStack itemstack )
+    public void onBlockPlacedBy( World world, BlockPos pos, BlockState state, LivingEntity player, @Nonnull ItemStack itemstack )
     {
         // Not sure why this is necessary
         TileEntity tile = world.getTileEntity( pos );
@@ -172,7 +172,7 @@ public class BlockTurtle extends BlockComputerBase
         }
 
         // Set direction
-        EnumFacing dir = DirectionUtil.fromEntityRot( player );
+        Direction dir = DirectionUtil.fromEntityRot( player );
         setDirection( world, pos, dir.getOpposite() );
     }
 }

@@ -8,7 +8,7 @@ package dan200.computercraft.shared.network;
 
 import io.netty.buffer.ByteBuf;
 import net.minecraft.nbt.CompressedStreamTools;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.PacketBuffer;
 
 import java.io.ByteArrayInputStream;
@@ -37,7 +37,7 @@ public class ComputerCraftPacket
     public String[] m_dataString;
     public int[] m_dataInt;
     public byte[][] m_dataByte;
-    public NBTTagCompound m_dataNBT;
+    public CompoundNBT m_dataNBT;
 
     public ComputerCraftPacket()
     {

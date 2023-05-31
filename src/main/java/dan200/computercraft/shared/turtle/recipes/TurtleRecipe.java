@@ -12,12 +12,12 @@ import dan200.computercraft.shared.computer.core.ComputerFamily;
 import dan200.computercraft.shared.computer.items.IComputerItem;
 import dan200.computercraft.shared.turtle.items.TurtleItemFactory;
 import dan200.computercraft.shared.util.RecipeUtil;
-import net.minecraft.inventory.InventoryCrafting;
+import net.minecraft.inventory.CraftingInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.item.crafting.ShapedRecipes;
-import net.minecraft.util.JsonUtils;
+import net.minecraft.item.crafting.ShapedRecipe;
+import net.minecraft.util.JSONUtils;
 import net.minecraft.util.NonNullList;
 import net.minecraft.world.World;
 import net.minecraftforge.common.crafting.CraftingHelper;
@@ -26,7 +26,7 @@ import net.minecraftforge.common.crafting.JsonContext;
 
 import javax.annotation.Nonnull;
 
-public class TurtleRecipe extends ShapedRecipes
+public class TurtleRecipe extends ShapedRecipe
 {
     private final NonNullList<Ingredient> m_recipe;
     private final ComputerFamily m_family;
@@ -39,14 +39,14 @@ public class TurtleRecipe extends ShapedRecipes
     }
 
     @Override
-    public boolean matches( @Nonnull InventoryCrafting _inventory, @Nonnull World world )
+    public boolean matches( @Nonnull CraftingInventory _inventory, @Nonnull World world )
     {
         return !getCraftingResult( _inventory ).isEmpty();
     }
 
     @Nonnull
     @Override
-    public ItemStack getCraftingResult( @Nonnull InventoryCrafting inventory )
+    public ItemStack getCraftingResult( @Nonnull CraftingInventory inventory )
     {
         // See if we match the recipe, and extract the input computercraft ID
         int computerID = -1;
@@ -90,9 +90,9 @@ public class TurtleRecipe extends ShapedRecipes
         @Override
         public IRecipe parse( JsonContext context, JsonObject json )
         {
-            String group = JsonUtils.getString( json, "group", "" );
+            String group = JSONUtils.getString( json, "group", "" );
 
-            String familyName = JsonUtils.getString( json, "family" );
+            String familyName = JSONUtils.getString( json, "family" );
             ComputerFamily family;
             try
             {

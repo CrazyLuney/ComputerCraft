@@ -19,13 +19,13 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
+import net.minecraft.client.renderer.tileentity.TileEntityRenderer;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import org.lwjgl.opengl.GL11;
 
-public class TileEntityMonitorRenderer extends TileEntitySpecialRenderer<TileMonitor>
+public class TileEntityMonitorRenderer extends TileEntityRenderer<TileMonitor>
 {
     public TileEntityMonitorRenderer()
     {
@@ -68,8 +68,8 @@ public class TileEntityMonitorRenderer extends TileEntitySpecialRenderer<TileMon
         posZ += originPos.getZ() - monitorPos.getZ();
 
         // Determine orientation
-        EnumFacing dir = origin.getDirection();
-        EnumFacing front = origin.getFront();
+        Direction dir = origin.getDirection();
+        Direction front = origin.getFront();
         float yaw = DirectionUtil.toYawAngle( dir );
         float pitch = DirectionUtil.toPitchAngle( front );
 

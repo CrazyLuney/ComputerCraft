@@ -13,9 +13,9 @@ import dan200.computercraft.api.turtle.TurtleCommandResult;
 import dan200.computercraft.shared.util.WorldUtil;
 import net.minecraft.block.Block;
 import net.minecraft.block.properties.IProperty;
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.BlockState;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.util.Direction;
 import net.minecraft.world.World;
 
 import javax.annotation.Nonnull;
@@ -37,7 +37,7 @@ public class TurtleInspectCommand implements ITurtleCommand
     public TurtleCommandResult execute( @Nonnull ITurtleAccess turtle )
     {
         // Get world direction from direction
-        EnumFacing direction = m_direction.toWorldDir( turtle );
+        Direction direction = m_direction.toWorldDir( turtle );
 
         // Check if thing in front is air or not
         World world = turtle.getWorld();
@@ -48,7 +48,7 @@ public class TurtleInspectCommand implements ITurtleCommand
         {
             if( !FAIL_ON_AIR || !world.isAirBlock( newPosition ) )
             {
-                IBlockState state = world.getBlockState( newPosition );
+                BlockState state = world.getBlockState( newPosition );
                 Block block = state.getBlock();
                 String name = Block.REGISTRY.getNameForObject( block ).toString();
                 int metadata = block.getMetaFromState( state );

@@ -6,10 +6,10 @@
 
 package dan200.computercraft.shared.peripheral.diskdrive;
 
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.Container;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.Slot;
+import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.ItemStack;
 
 import javax.annotation.Nonnull;
@@ -38,14 +38,14 @@ public class ContainerDiskDrive extends Container
     }
 
     @Override
-    public boolean canInteractWith( @Nonnull EntityPlayer player )
+    public boolean canInteractWith( @Nonnull PlayerEntity player )
     {
         return m_diskDrive.isUsableByPlayer( player );
     }
 
     @Nonnull
     @Override
-    public ItemStack transferStackInSlot( EntityPlayer player, int i )
+    public ItemStack transferStackInSlot( PlayerEntity player, int i )
     {
         ItemStack itemstack = ItemStack.EMPTY;
         Slot slot = inventorySlots.get(i);

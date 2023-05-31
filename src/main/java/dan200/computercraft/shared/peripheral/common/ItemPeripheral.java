@@ -9,7 +9,7 @@ package dan200.computercraft.shared.peripheral.common;
 import dan200.computercraft.ComputerCraft;
 import dan200.computercraft.shared.peripheral.PeripheralType;
 import net.minecraft.block.Block;
-import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
 
@@ -75,7 +75,7 @@ public class ItemPeripheral extends ItemPeripheralBase
     }
 
     @Override
-    public void getSubItems( @Nonnull CreativeTabs tabs, @Nonnull NonNullList<ItemStack> list )
+    public void getSubItems( @Nonnull ItemGroup tabs, @Nonnull NonNullList<ItemStack> list )
     {
         if( !isInCreativeTab( tabs ) ) return;
         list.add( PeripheralItemFactory.create( PeripheralType.DiskDrive, null, 1 ) );

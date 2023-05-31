@@ -15,9 +15,9 @@ import dan200.computercraft.shared.computer.core.IComputerContainer;
 import dan200.computercraft.shared.util.Colour;
 import dan200.computercraft.shared.util.Palette;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.util.ChatAllowedCharacters;
+import net.minecraft.util.SharedConstants;
 import net.minecraft.util.ResourceLocation;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
@@ -98,7 +98,7 @@ public class WidgetTerminal extends Widget
             // Ctrl+V for paste
             if( ch == 22 )
             {
-                String clipboard = GuiScreen.getClipboardString();
+                String clipboard = Screen.getClipboardString();
                 if( clipboard != null )
                 {
                     // Clip to the first occurance of \r or \n
@@ -118,7 +118,7 @@ public class WidgetTerminal extends Widget
                     }
 
                     // Filter the string
-                    clipboard = ChatAllowedCharacters.filterAllowedCharacters( clipboard );
+                    clipboard = SharedConstants.filterAllowedCharacters( clipboard );
 
                     if( !clipboard.isEmpty() )
                     {

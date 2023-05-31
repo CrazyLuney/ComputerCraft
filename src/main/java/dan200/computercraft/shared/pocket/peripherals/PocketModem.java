@@ -6,7 +6,7 @@ import dan200.computercraft.api.pocket.IPocketUpgrade;
 import dan200.computercraft.shared.peripheral.PeripheralType;
 import dan200.computercraft.shared.peripheral.common.PeripheralItemFactory;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 
@@ -65,9 +65,9 @@ public class PocketModem implements IPocketUpgrade
             Entity entity = access.getEntity();
 
             PocketModemPeripheral modem = (PocketModemPeripheral) peripheral;
-            if( entity instanceof EntityLivingBase )
+            if( entity instanceof LivingEntity )
             {
-                EntityLivingBase player = (EntityLivingBase) entity;
+                LivingEntity player = (LivingEntity) entity;
                 modem.setLocation( entity.getEntityWorld(), player.posX, player.posY + player.getEyeHeight(), player.posZ );
             }
             else if( entity != null )

@@ -16,20 +16,20 @@ import dan200.computercraft.shared.peripheral.PeripheralType;
 import dan200.computercraft.shared.peripheral.common.BlockPeripheral;
 import dan200.computercraft.shared.peripheral.common.TilePeripheralBase;
 import dan200.computercraft.shared.util.InventoryUtil;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.item.EntityItem;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.block.BlockState;
+import net.minecraft.entity.item.ItemEntity;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumHand;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.util.Direction;
+import net.minecraft.util.Hand;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TextComponentString;
-import net.minecraft.util.text.TextComponentTranslation;
+import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.items.IItemHandlerModifiable;
@@ -96,20 +96,20 @@ public class TileDiskDrive extends TilePeripheralBase
     }
 
     @Override
-    public boolean onActivate( EntityPlayer player, EnumFacing side, float hitX, float hitY, float hitZ )
+    public boolean onActivate( PlayerEntity player, Direction side, float hitX, float hitY, float hitZ )
     {
         if( player.isSneaking() )
         {
             // Try to put a disk into the drive
             if( !getWorld().isRemote )
             {
-                ItemStack disk = player.getHeldItem( EnumHand.MAIN_HAND );
+                ItemStack disk = player.getHeldItem( Hand.MAIN_HAND );
                 if( !disk.isEmpty() && getStackInSlot(0).isEmpty() )
                 {
                     if( ComputerCraft.getMedia( disk ) != null )
                     {
                         setInventorySlotContents( 0, disk );
-                        player.setHeldItem( EnumHand.MAIN_HAND, ItemStack.EMPTY );
+                        player.setHeldItem( Hand.MAIN_HAND, ItemStack.EMPTY );
                         return true;
                     }
                 }
@@ -128,29 +128,29 @@ public class TileDiskDrive extends TilePeripheralBase
     }
 
     @Override
-    public EnumFacing getDirection()
+    public Direction getDirection()
     {
-        IBlockState state = getBlockState();
+        BlockState state = getBlockState();
         return state.getValue( BlockPeripheral.Properties.FACING );
     }
 
     @Override
-    public void setDirection( EnumFacing dir )
+    public void setDirection( Direction dir )
     {
-        if( dir.getAxis() == EnumFacing.Axis.Y )
+        if( dir.getAxis() == Direction.Axis.Y )
         {
-            dir = EnumFacing.NORTH;
+            dir = Direction.NORTH;
         }
         setBlockState( getBlockState().withProperty( BlockPeripheral.Properties.FACING, dir ) );
     }
 
     @Override
-    public void readFromNBT(NBTTagCompound nbttagcompound)
+    public void readFromNBT(CompoundNBT nbttagcompound)
     {
         super.readFromNBT(nbttagcompound);
         if( nbttagcompound.hasKey( "item" ) )
         {
-            NBTTagCompound item = nbttagcompound.getCompoundTag( "item" );
+            CompoundNBT item = nbttagcompound.getCompoundTag( "item" );
             m_diskStack = new ItemStack( item );
             m_diskMount = null;
         }
@@ -158,12 +158,12 @@ public class TileDiskDrive extends TilePeripheralBase
 
     @Nonnull
     @Override
-    public NBTTagCompound writeToNBT(NBTTagCompound nbttagcompound)
+    public CompoundNBT writeToNBT(CompoundNBT nbttagcompound)
     {
         nbttagcompound = super.writeToNBT(nbttagcompound);
         if( !m_diskStack.isEmpty() )
         {
-            NBTTagCompound item = new NBTTagCompound();
+            CompoundNBT item = new CompoundNBT();
             m_diskStack.writeToNBT( item );
             nbttagcompound.setTag( "item", item );
         }
@@ -358,11 +358,11 @@ public class TileDiskDrive extends TilePeripheralBase
     {
         if( hasCustomName() )
         {
-            return new TextComponentString( getName() );
+            return new StringTextComponent( getName() );
         }
         else
         {
-            return new TextComponentTranslation( getName() );
+            return new TranslationTextComponent( getName() );
         }
     }
 
@@ -373,12 +373,12 @@ public class TileDiskDrive extends TilePeripheralBase
     }
 
     @Override
-    public void openInventory( @Nonnull EntityPlayer player )
+    public void openInventory( @Nonnull PlayerEntity player )
     {
     }
     
     @Override
-    public void closeInventory( @Nonnull EntityPlayer player )
+    public void closeInventory( @Nonnull PlayerEntity player )
     {
     }
 
@@ -389,7 +389,7 @@ public class TileDiskDrive extends TilePeripheralBase
     }
 
     @Override
-    public boolean isUsableByPlayer( @Nonnull EntityPlayer player )
+    public boolean isUsableByPlayer( @Nonnull PlayerEntity player )
     {
         return isUsable( player, false );
     }
@@ -423,7 +423,7 @@ public class TileDiskDrive extends TilePeripheralBase
     // IPeripheralTile implementation
 
     @Override
-    public IPeripheral getPeripheral( EnumFacing side )
+    public IPeripheral getPeripheral( Direction side )
     {
         return new DiskDrivePeripheral( this );
     }
@@ -609,7 +609,7 @@ public class TileDiskDrive extends TilePeripheralBase
             int zOff = 0;
             if( !destroyed )
             {
-                EnumFacing dir = getDirection();
+                Direction dir = getDirection();
                 xOff = dir.getFrontOffsetX();
                 zOff = dir.getFrontOffsetZ();
             }
@@ -618,7 +618,7 @@ public class TileDiskDrive extends TilePeripheralBase
             double x = (double)pos.getX() + 0.5 + ((double)xOff * 0.5);
             double y = (double)pos.getY() + 0.75;
             double z = (double)pos.getZ() + 0.5 + ((double)zOff * 0.5);
-            EntityItem entityitem = new EntityItem( getWorld(), x, y, z, disks );
+            ItemEntity entityitem = new ItemEntity( getWorld(), x, y, z, disks );
             entityitem.motionX = (double)xOff * 0.15;
             entityitem.motionY = 0.0;
             entityitem.motionZ = (double)zOff * 0.15;
@@ -632,7 +632,7 @@ public class TileDiskDrive extends TilePeripheralBase
     }
 
     @Override
-    public final void readDescription( @Nonnull NBTTagCompound nbttagcompound )
+    public final void readDescription( @Nonnull CompoundNBT nbttagcompound )
     {
         super.readDescription( nbttagcompound );
         if( nbttagcompound.hasKey( "item" ) )
@@ -647,12 +647,12 @@ public class TileDiskDrive extends TilePeripheralBase
     }
 
     @Override
-    public void writeDescription( @Nonnull NBTTagCompound nbttagcompound )
+    public void writeDescription( @Nonnull CompoundNBT nbttagcompound )
     {
         super.writeDescription( nbttagcompound );
         if( !m_diskStack.isEmpty() )
         {
-            NBTTagCompound item = new NBTTagCompound();
+            CompoundNBT item = new CompoundNBT();
             m_diskStack.writeToNBT( item );
             nbttagcompound.setTag( "item", item );
         }
@@ -678,7 +678,7 @@ public class TileDiskDrive extends TilePeripheralBase
     }
 
     @Override
-    public boolean shouldRefresh( World world, BlockPos pos, @Nonnull IBlockState oldState, @Nonnull IBlockState newState )
+    public boolean shouldRefresh( World world, BlockPos pos, @Nonnull BlockState oldState, @Nonnull BlockState newState )
     {
         return super.shouldRefresh( world, pos, oldState, newState ) || ComputerCraft.Blocks.peripheral.getPeripheralType( newState ) != PeripheralType.DiskDrive;
     }
@@ -705,14 +705,14 @@ public class TileDiskDrive extends TilePeripheralBase
     }
 
     @Override
-    public boolean hasCapability( @Nonnull Capability<?> capability, @Nullable EnumFacing facing )
+    public boolean hasCapability( @Nonnull Capability<?> capability, @Nullable Direction facing )
     {
         return capability == ITEM_HANDLER_CAPABILITY ||  super.hasCapability( capability, facing );
     }
 
     @Nullable
     @Override
-    public <T> T getCapability( @Nonnull Capability<T> capability, @Nullable EnumFacing facing )
+    public <T> T getCapability( @Nonnull Capability<T> capability, @Nullable Direction facing )
     {
         if( capability == ITEM_HANDLER_CAPABILITY )
         {

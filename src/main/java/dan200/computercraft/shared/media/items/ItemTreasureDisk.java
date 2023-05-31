@@ -12,11 +12,11 @@ import dan200.computercraft.api.media.IMedia;
 import dan200.computercraft.core.filesystem.SubMount;
 import dan200.computercraft.shared.util.Colour;
 import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemGroup;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
@@ -38,7 +38,7 @@ public class ItemTreasureDisk extends Item
     }
     
     @Override
-    public void getSubItems( @Nonnull CreativeTabs tabs, @Nonnull NonNullList<ItemStack> list )
+    public void getSubItems( @Nonnull ItemGroup tabs, @Nonnull NonNullList<ItemStack> list )
     {
     }
     
@@ -53,7 +53,7 @@ public class ItemTreasureDisk extends Item
     }
 
     @Override
-    public boolean doesSneakBypassUse( @Nonnull ItemStack stack, IBlockAccess world, BlockPos pos, EntityPlayer player )
+    public boolean doesSneakBypassUse( @Nonnull ItemStack stack, IBlockAccess world, BlockPos pos, PlayerEntity player )
     {
         return true;
     }
@@ -112,7 +112,7 @@ public class ItemTreasureDisk extends Item
     
     public static ItemStack create( String subPath, int colourIndex )
     {    
-        NBTTagCompound nbt = new NBTTagCompound();
+        CompoundNBT nbt = new CompoundNBT();
         nbt.setString( "subPath", subPath );
         
         int slash = subPath.indexOf( "/" );
@@ -142,7 +142,7 @@ public class ItemTreasureDisk extends Item
     
     public String getTitle( @Nonnull ItemStack stack )
     {
-        NBTTagCompound nbt = stack.getTagCompound();
+        CompoundNBT nbt = stack.getTagCompound();
         if( nbt != null && nbt.hasKey( "title" ) )
         {
             return nbt.getString( "title" );
@@ -152,7 +152,7 @@ public class ItemTreasureDisk extends Item
     
     public String getSubPath( @Nonnull ItemStack stack )
     {
-        NBTTagCompound nbt = stack.getTagCompound();
+        CompoundNBT nbt = stack.getTagCompound();
         if( nbt != null && nbt.hasKey( "subPath" ) )
         {
             return nbt.getString( "subPath" );
@@ -162,7 +162,7 @@ public class ItemTreasureDisk extends Item
     
     public int getColour( @Nonnull ItemStack stack )
     {
-        NBTTagCompound nbt = stack.getTagCompound();
+        CompoundNBT nbt = stack.getTagCompound();
         if( nbt != null && nbt.hasKey( "colour" ) )
         {
             return nbt.getInteger( "colour" );

@@ -4,7 +4,7 @@ import dan200.computercraft.api.media.IMedia;
 import dan200.computercraft.api.media.IMediaProvider;
 import dan200.computercraft.shared.media.items.RecordMedia;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemRecord;
+import net.minecraft.item.MusicDiscItem;
 import net.minecraft.item.ItemStack;
 
 import javax.annotation.Nonnull;
@@ -23,7 +23,7 @@ public class DefaultMediaProvider implements IMediaProvider
         {
             return (IMedia)item;
         }
-        else if( item instanceof ItemRecord )
+        else if( item instanceof MusicDiscItem )
         {
             return new RecordMedia();
         }

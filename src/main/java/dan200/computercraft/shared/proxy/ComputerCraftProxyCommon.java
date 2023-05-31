@@ -53,17 +53,17 @@ import dan200.computercraft.shared.turtle.blocks.TileTurtle;
 import dan200.computercraft.shared.turtle.inventory.ContainerTurtle;
 import dan200.computercraft.shared.util.*;
 import net.minecraft.block.Block;
-import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.init.Items;
+import net.minecraft.item.ItemGroup;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.item.Items;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemRecord;
+import net.minecraft.item.MusicDiscItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.network.play.server.SPacketUpdateTileEntity;
+import net.minecraft.network.play.server.SUpdateTileEntityPacket;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
@@ -97,7 +97,7 @@ public abstract class ComputerCraftProxyCommon implements IComputerCraftProxy
         MinecraftForge.EVENT_BUS.register( this );
 
         // Creative tab
-        ComputerCraft.mainCreativeTab = new CreativeTabMain( CreativeTabs.getNextID() );
+        ComputerCraft.mainCreativeTab = new CreativeTabMain( ItemGroup.getNextID() );
 
         // Recipe types
         // RecipeSorter.register( "computercraft:impostor", ImpostorRecipe.class, RecipeSorter.Category.SHAPED, "after:minecraft:shapeless" );
@@ -136,9 +136,9 @@ public abstract class ComputerCraftProxyCommon implements IComputerCraftProxy
     public String getRecordInfo( @Nonnull ItemStack recordStack )
     {
         Item item = recordStack.getItem();
-        if (item instanceof ItemRecord)
+        if (item instanceof MusicDiscItem)
         {
-            ItemRecord record = (ItemRecord) item;
+            MusicDiscItem record = (MusicDiscItem) item;
             return StringUtil.translateToLocal( record.displayName );
         }
         return null;
@@ -148,28 +148,28 @@ public abstract class ComputerCraftProxyCommon implements IComputerCraftProxy
     public abstract void playRecord( SoundEvent record, String recordInfo, World world, BlockPos pos );
 
     @Override
-    public abstract Object getDiskDriveGUI( InventoryPlayer inventory, TileDiskDrive drive );
+    public abstract Object getDiskDriveGUI( PlayerInventory inventory, TileDiskDrive drive );
 
     @Override
     public abstract Object getComputerGUI( TileComputer computer );
 
     @Override
-    public abstract Object getPrinterGUI( InventoryPlayer inventory, TilePrinter printer );
+    public abstract Object getPrinterGUI( PlayerInventory inventory, TilePrinter printer );
 
     @Override
-    public abstract Object getTurtleGUI( InventoryPlayer inventory, TileTurtle turtle );
+    public abstract Object getTurtleGUI( PlayerInventory inventory, TileTurtle turtle );
 
     @Override
-    public abstract Object getPrintoutGUI( EntityPlayer player, EnumHand hand );
+    public abstract Object getPrintoutGUI( PlayerEntity player, Hand hand );
 
     @Override
-    public abstract Object getPocketComputerGUI( EntityPlayer player, EnumHand hand );
+    public abstract Object getPocketComputerGUI( PlayerEntity player, Hand hand );
 
     @Override
     public abstract File getWorldDir( World world );
 
     @Override
-    public void handlePacket( final ComputerCraftPacket packet, final EntityPlayer player )
+    public void handlePacket( final ComputerCraftPacket packet, final PlayerEntity player )
     {
         IThreadListener listener = player.getServer();
         if (listener != null)
@@ -184,7 +184,7 @@ public abstract class ComputerCraftProxyCommon implements IComputerCraftProxy
         }
     }
 
-    private void processPacket( ComputerCraftPacket packet, EntityPlayer player )
+    private void processPacket( ComputerCraftPacket packet, PlayerEntity player )
     {
         switch (packet.m_packetType)
         {
@@ -217,10 +217,10 @@ public abstract class ComputerCraftProxyCommon implements IComputerCraftProxy
                 if (tileEntity != null && tileEntity instanceof TileGeneric)
                 {
                     TileGeneric generic = (TileGeneric) tileEntity;
-                    SPacketUpdateTileEntity description = generic.getUpdatePacket();
+                    SUpdateTileEntityPacket description = generic.getUpdatePacket();
                     if (description != null)
                     {
-                        ((EntityPlayerMP) player).connection.sendPacket( description );
+                        ((ServerPlayerEntity) player).connection.sendPacket( description );
                     }
                 }
                 break;
@@ -481,7 +481,7 @@ public abstract class ComputerCraftProxyCommon implements IComputerCraftProxy
         // IGuiHandler implementation
 
         @Override
-        public Object getServerGuiElement( int id, EntityPlayer player, World world, int x, int y, int z )
+        public Object getServerGuiElement( int id, PlayerEntity player, World world, int x, int y, int z )
         {
             BlockPos pos = new BlockPos( x, y, z );
             switch (id)
@@ -528,18 +528,18 @@ public abstract class ComputerCraftProxyCommon implements IComputerCraftProxy
                 }
                 case ComputerCraft.printoutGUIID:
                 {
-                    return new ContainerHeldItem( player, x == 0 ? EnumHand.MAIN_HAND : EnumHand.MAIN_HAND );
+                    return new ContainerHeldItem( player, x == 0 ? Hand.MAIN_HAND : Hand.MAIN_HAND );
                 }
                 case ComputerCraft.pocketComputerGUIID:
                 {
-                    return new ContainerPocketComputer( player, x == 0 ? EnumHand.MAIN_HAND : EnumHand.OFF_HAND );
+                    return new ContainerPocketComputer( player, x == 0 ? Hand.MAIN_HAND : Hand.OFF_HAND );
                 }
             }
             return null;
         }
 
         @Override
-        public Object getClientGuiElement( int id, EntityPlayer player, World world, int x, int y, int z )
+        public Object getClientGuiElement( int id, PlayerEntity player, World world, int x, int y, int z )
         {
             BlockPos pos = new BlockPos( x, y, z );
             switch (id)
@@ -586,11 +586,11 @@ public abstract class ComputerCraftProxyCommon implements IComputerCraftProxy
                 }
                 case ComputerCraft.printoutGUIID:
                 {
-                    return getPrintoutGUI( player, x == 0 ? EnumHand.MAIN_HAND : EnumHand.OFF_HAND );
+                    return getPrintoutGUI( player, x == 0 ? Hand.MAIN_HAND : Hand.OFF_HAND );
                 }
                 case ComputerCraft.pocketComputerGUIID:
                 {
-                    return getPocketComputerGUI( player, x == 0 ? EnumHand.MAIN_HAND : EnumHand.OFF_HAND );
+                    return getPocketComputerGUI( player, x == 0 ? Hand.MAIN_HAND : Hand.OFF_HAND );
                 }
             }
             return null;

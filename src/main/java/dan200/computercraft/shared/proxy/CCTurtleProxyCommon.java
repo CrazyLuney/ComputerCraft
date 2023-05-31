@@ -25,8 +25,8 @@ import dan200.computercraft.shared.util.ImpostorRecipe;
 import dan200.computercraft.shared.util.InventoryUtil;
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.item.EntityItem;
-import net.minecraft.init.Items;
+import net.minecraft.entity.item.ItemEntity;
+import net.minecraft.item.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
@@ -195,7 +195,7 @@ public abstract class CCTurtleProxyCommon implements ICCTurtleProxy
             if( !captured )
             {
                 entity.captureDrops = true;
-                ArrayList<EntityItem> items = entity.capturedDrops;
+                ArrayList<ItemEntity> items = entity.capturedDrops;
                 
                 if( items == null || items.size() == 0 )
                 {
@@ -215,7 +215,7 @@ public abstract class CCTurtleProxyCommon implements ICCTurtleProxy
             if( captured )
             {
                 entity.captureDrops = false;
-                ArrayList<EntityItem> items = entity.capturedDrops;
+                ArrayList<ItemEntity> items = entity.capturedDrops;
                 
                 if( items != null )
                 {
@@ -467,13 +467,13 @@ public abstract class CCTurtleProxyCommon implements ICCTurtleProxy
         }
     }
     
-    private void dispatchEntityDrops( Entity entity, java.util.List<EntityItem> drops )
+    private void dispatchEntityDrops( Entity entity, java.util.List<ItemEntity> drops )
     {
         IEntityDropConsumer consumer = m_dropConsumers.get( entity );
         if( consumer != null )
         {
             // All checks have passed, lets dispatch the drops
-            for(EntityItem entityItem : drops)
+            for(ItemEntity entityItem : drops)
             {
                 consumer.consumeDrop( entity, entityItem.getItem() );
             }

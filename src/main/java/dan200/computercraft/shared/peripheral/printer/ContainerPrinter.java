@@ -6,12 +6,12 @@
 
 package dan200.computercraft.shared.peripheral.printer;
 
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Items;
-import net.minecraft.inventory.Container;
-import net.minecraft.inventory.IContainerListener;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.Items;
+import net.minecraft.inventory.container.Container;
+import net.minecraft.inventory.container.IContainerListener;
 import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.Slot;
+import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.ItemStack;
 
 import javax.annotation.Nonnull;
@@ -98,14 +98,14 @@ public class ContainerPrinter extends Container
     }
 
     @Override
-    public boolean canInteractWith( @Nonnull EntityPlayer player )
+    public boolean canInteractWith( @Nonnull PlayerEntity player )
     {
         return m_printer.isUsableByPlayer( player );
     }
 
     @Nonnull
     @Override
-    public ItemStack transferStackInSlot(EntityPlayer par1EntityPlayer, int i)
+    public ItemStack transferStackInSlot(PlayerEntity par1EntityPlayer, int i)
     {
         ItemStack itemstack = ItemStack.EMPTY;
         Slot slot = inventorySlots.get(i);

@@ -18,12 +18,12 @@ import dan200.computercraft.shared.util.DirectionUtil;
 import dan200.computercraft.shared.util.PeripheralUtil;
 import dan200.computercraft.shared.util.RedstoneUtil;
 import net.minecraft.block.Block;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Items;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.Items;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumHand;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.util.Direction;
+import net.minecraft.util.Hand;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.math.BlockPos;
 
@@ -74,7 +74,7 @@ public abstract class TileComputerBase extends TileGeneric
     public void destroy()
     {
         unload();
-        for( EnumFacing dir : EnumFacing.VALUES )
+        for( Direction dir : Direction.VALUES )
         {
             RedstoneUtil.propagateRedstoneOutput( getWorld(), getPos(), dir );
         }
@@ -93,14 +93,14 @@ public abstract class TileComputerBase extends TileGeneric
         super.invalidate();
     }
 
-    public abstract void openGUI( EntityPlayer player );
+    public abstract void openGUI( PlayerEntity player );
 
-    protected boolean canNameWithTag( EntityPlayer player )
+    protected boolean canNameWithTag( PlayerEntity player )
     {
         return false;
     }
 
-    protected boolean onDefaultComputerInteract( EntityPlayer player )
+    protected boolean onDefaultComputerInteract( PlayerEntity player )
     {
         if( !getWorld().isRemote )
         {
@@ -114,9 +114,9 @@ public abstract class TileComputerBase extends TileGeneric
     }
 
     @Override
-    public boolean onActivate( EntityPlayer player, EnumFacing side, float hitX, float hitY, float hitZ )
+    public boolean onActivate( PlayerEntity player, Direction side, float hitX, float hitY, float hitZ )
     {
-        ItemStack currentItem = player.getHeldItem( EnumHand.MAIN_HAND );
+        ItemStack currentItem = player.getHeldItem( Hand.MAIN_HAND );
         if( !currentItem.isEmpty() && currentItem.getItem() == Items.NAME_TAG && canNameWithTag( player ) )
         {
             // Label to rename computer
@@ -143,7 +143,7 @@ public abstract class TileComputerBase extends TileGeneric
     }
 
     @Override
-    public boolean getRedstoneConnectivity( EnumFacing side )
+    public boolean getRedstoneConnectivity( Direction side )
     {
         if( side == null ) return false;
         int localDir = remapLocalSide( DirectionUtil.toLocal( this, side.getOpposite() ) );
@@ -151,7 +151,7 @@ public abstract class TileComputerBase extends TileGeneric
     }
 
     @Override
-    public int getRedstoneOutput( EnumFacing side )
+    public int getRedstoneOutput( Direction side )
     {
         int localDir = remapLocalSide( DirectionUtil.toLocal( this, side ) );
         if( !isRedstoneBlockedOnSide( localDir ) )
@@ -169,14 +169,14 @@ public abstract class TileComputerBase extends TileGeneric
     }
 
     @Override
-    public boolean getBundledRedstoneConnectivity( @Nonnull EnumFacing side )
+    public boolean getBundledRedstoneConnectivity( @Nonnull Direction side )
     {
         int localDir = remapLocalSide( DirectionUtil.toLocal( this, side ) );
         return !isRedstoneBlockedOnSide( localDir );
     }
 
     @Override
-    public int getBundledRedstoneOutput( @Nonnull EnumFacing side )
+    public int getBundledRedstoneOutput( @Nonnull Direction side )
     {
         int localDir = remapLocalSide( DirectionUtil.toLocal( this, side ) );
         if( !isRedstoneBlockedOnSide( localDir ) )
@@ -243,7 +243,7 @@ public abstract class TileComputerBase extends TileGeneric
 
     @Nonnull
     @Override
-    public NBTTagCompound writeToNBT( NBTTagCompound nbttagcompound )
+    public CompoundNBT writeToNBT( CompoundNBT nbttagcompound )
     {
         nbttagcompound = super.writeToNBT( nbttagcompound );
 
@@ -261,7 +261,7 @@ public abstract class TileComputerBase extends TileGeneric
     }
 
     @Override
-    public void readFromNBT( NBTTagCompound nbttagcompound )
+    public void readFromNBT( CompoundNBT nbttagcompound )
     {
         super.readFromNBT( nbttagcompound );
 
@@ -317,9 +317,9 @@ public abstract class TileComputerBase extends TileGeneric
         return localSide;
     }
 
-    private void updateSideInput( ServerComputer computer, EnumFacing dir, BlockPos offset )
+    private void updateSideInput( ServerComputer computer, Direction dir, BlockPos offset )
     {
-        EnumFacing offsetSide = dir.getOpposite();
+        Direction offsetSide = dir.getOpposite();
         int localDir = remapLocalSide( DirectionUtil.toLocal( this, dir ) );
         if( !isRedstoneBlockedOnSide( localDir ) )
         {
@@ -344,7 +344,7 @@ public abstract class TileComputerBase extends TileGeneric
         if( computer != null )
         {
             BlockPos pos = computer.getPosition();
-            for( EnumFacing dir : EnumFacing.VALUES )
+            for( Direction dir : Direction.VALUES )
             {
                 updateSideInput( computer, dir, pos.offset( dir ) );
             }
@@ -362,7 +362,7 @@ public abstract class TileComputerBase extends TileGeneric
         if( computer != null )
         {
             BlockPos pos = computer.getPosition();
-            for( EnumFacing dir : EnumFacing.VALUES )
+            for( Direction dir : Direction.VALUES )
             {
                 BlockPos offset = pos.offset( dir );
                 if ( offset.equals( neighbour ) )
@@ -378,7 +378,7 @@ public abstract class TileComputerBase extends TileGeneric
     {
         // Update redstone
         updateBlock();
-        for( EnumFacing dir : EnumFacing.VALUES )
+        for( Direction dir : Direction.VALUES )
         {
             RedstoneUtil.propagateRedstoneOutput( getWorld(), getPos(), dir );
         }
@@ -520,14 +520,14 @@ public abstract class TileComputerBase extends TileGeneric
     // Networking stuff
 
     @Override
-    public void writeDescription( @Nonnull NBTTagCompound nbttagcompound )
+    public void writeDescription( @Nonnull CompoundNBT nbttagcompound )
     {
         super.writeDescription( nbttagcompound );
         nbttagcompound.setInteger( "instanceID", createServerComputer().getInstanceID() );
     }
 
     @Override
-    public void readDescription( @Nonnull NBTTagCompound nbttagcompound )
+    public void readDescription( @Nonnull CompoundNBT nbttagcompound )
     {
         super.readDescription( nbttagcompound );
         m_instanceID = nbttagcompound.getInteger( "instanceID" );

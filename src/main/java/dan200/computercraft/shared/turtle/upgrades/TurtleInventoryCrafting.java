@@ -9,20 +9,20 @@ package dan200.computercraft.shared.turtle.upgrades;
 import dan200.computercraft.api.turtle.ITurtleAccess;
 import dan200.computercraft.shared.turtle.blocks.TileTurtle;
 import dan200.computercraft.shared.turtle.core.TurtlePlayer;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.InventoryCrafting;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.inventory.CraftingInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.CraftingManager;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TextComponentString;
+import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.world.World;
-import net.minecraft.world.WorldServer;
+import net.minecraft.world.server.ServerWorld;
 
 import javax.annotation.Nonnull;
 import java.util.ArrayList;
 
-public class TurtleInventoryCrafting extends InventoryCrafting
+public class TurtleInventoryCrafting extends CraftingInventory
 {
     private ITurtleAccess m_turtle;
     private int m_xStart;
@@ -64,7 +64,7 @@ public class TurtleInventoryCrafting extends InventoryCrafting
 
     public ArrayList<ItemStack> doCrafting( World world, int maxCount )
     {
-        if( world.isRemote || !(world instanceof WorldServer) )
+        if( world.isRemote || !(world instanceof ServerWorld) )
         {
             return null;
         }
@@ -118,7 +118,7 @@ public class TurtleInventoryCrafting extends InventoryCrafting
             }
 
             // Do post-pickup stuff
-            TurtlePlayer turtlePlayer = new TurtlePlayer( (WorldServer)world );
+            TurtlePlayer turtlePlayer = new TurtlePlayer( (ServerWorld)world );
             result.onCrafting( world, turtlePlayer, numToCraft );
             results.add( result );
 
@@ -223,7 +223,7 @@ public class TurtleInventoryCrafting extends InventoryCrafting
     @Override
     public ITextComponent getDisplayName()
     {
-        return new TextComponentString( "" );
+        return new StringTextComponent( "" );
     }
 
     @Nonnull
@@ -262,18 +262,18 @@ public class TurtleInventoryCrafting extends InventoryCrafting
     }
 
     @Override
-    public boolean isUsableByPlayer( EntityPlayer player )
+    public boolean isUsableByPlayer( PlayerEntity player )
     {
         return true;
     }
 
     @Override
-    public void openInventory( EntityPlayer player )
+    public void openInventory( PlayerEntity player )
     {
     }
 
     @Override
-    public void closeInventory( EntityPlayer player )
+    public void closeInventory( PlayerEntity player )
     {
     }
 

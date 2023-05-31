@@ -14,7 +14,7 @@ import dan200.computercraft.shared.computer.core.ComputerFamily;
 import dan200.computercraft.shared.util.ColourUtils;
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.util.Constants;
 
@@ -34,7 +34,7 @@ public class ItemTurtleNormal extends ItemTurtleBase implements IColouredItem
     {
         // Build the stack
         ItemStack stack = new ItemStack( this, 1, 0 );
-        NBTTagCompound nbt = new NBTTagCompound();
+        CompoundNBT nbt = new CompoundNBT();
         if( leftUpgrade != null )
         {
             int leftUpgradeLegacyID = leftUpgrade.getLegacyUpgradeID();
@@ -93,7 +93,7 @@ public class ItemTurtleNormal extends ItemTurtleBase implements IColouredItem
     {
         if( stack.hasTagCompound() )
         {
-            NBTTagCompound nbt = stack.getTagCompound();
+            CompoundNBT nbt = stack.getTagCompound();
             if( nbt.hasKey( "computerID" ) )
             {
                 return nbt.getInteger( "computerID" );
@@ -115,7 +115,7 @@ public class ItemTurtleNormal extends ItemTurtleBase implements IColouredItem
     {
         if( stack.hasTagCompound() )
         {
-            NBTTagCompound nbt = stack.getTagCompound();
+            CompoundNBT nbt = stack.getTagCompound();
             switch( side )
             {
                 case Left:
@@ -156,7 +156,7 @@ public class ItemTurtleNormal extends ItemTurtleBase implements IColouredItem
     @Override
     public int getColour( @Nonnull ItemStack stack )
     {
-        NBTTagCompound tag = stack.getTagCompound();
+        CompoundNBT tag = stack.getTagCompound();
         return tag == null ? -1 : ColourUtils.getHexColour( tag );
     }
 
@@ -165,7 +165,7 @@ public class ItemTurtleNormal extends ItemTurtleBase implements IColouredItem
     {
         if( stack.hasTagCompound() )
         {
-            NBTTagCompound nbt = stack.getTagCompound();
+            CompoundNBT nbt = stack.getTagCompound();
             if( nbt.hasKey( "overlay_mod" ) && nbt.hasKey( "overlay_path" ) )
             {
                 String overlay_mod = nbt.getString( "overlay_mod" );
@@ -181,7 +181,7 @@ public class ItemTurtleNormal extends ItemTurtleBase implements IColouredItem
     {
         if( stack.hasTagCompound() )
         {
-            NBTTagCompound nbt = stack.getTagCompound();
+            CompoundNBT nbt = stack.getTagCompound();
             if( nbt.hasKey( "fuelLevel" ) )
             {
                 return nbt.getInteger( "fuelLevel" );

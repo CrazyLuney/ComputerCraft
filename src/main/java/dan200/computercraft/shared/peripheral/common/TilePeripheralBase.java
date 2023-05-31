@@ -11,9 +11,9 @@ import dan200.computercraft.shared.common.IDirectionalTile;
 import dan200.computercraft.shared.common.TileGeneric;
 import dan200.computercraft.shared.peripheral.PeripheralType;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.ITickable;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.util.Direction;
 import net.minecraft.util.NonNullList;
 
 import javax.annotation.Nonnull;
@@ -24,7 +24,7 @@ public abstract class TilePeripheralBase extends TileGeneric
 {
     // Statics
 
-    private EnumFacing m_dir;
+    private Direction m_dir;
     private int m_anim;
     private boolean m_changed;
 
@@ -32,7 +32,7 @@ public abstract class TilePeripheralBase extends TileGeneric
 
     public TilePeripheralBase()
     {
-        m_dir = EnumFacing.NORTH;
+        m_dir = Direction.NORTH;
         m_anim = 0;
         m_changed = false;
 
@@ -70,7 +70,7 @@ public abstract class TilePeripheralBase extends TileGeneric
     }
 
     @Override
-    public IPeripheral getPeripheral( EnumFacing side )
+    public IPeripheral getPeripheral( Direction side )
     {
         return null;
     }
@@ -93,13 +93,13 @@ public abstract class TilePeripheralBase extends TileGeneric
     // IDirectionalTile implementation
 
     @Override
-    public EnumFacing getDirection()
+    public Direction getDirection()
     {
         return m_dir;
     }
 
     @Override
-    public void setDirection( EnumFacing dir )
+    public void setDirection( Direction dir )
     {
         if( dir != m_dir )
         {
@@ -133,13 +133,13 @@ public abstract class TilePeripheralBase extends TileGeneric
     }
             
     @Override    
-    public void readFromNBT( NBTTagCompound nbttagcompound )
+    public void readFromNBT( CompoundNBT nbttagcompound )
     {
         // Read properties
         super.readFromNBT(nbttagcompound);
         if( nbttagcompound.hasKey( "dir" ) )
         {
-            m_dir = EnumFacing.getFront( nbttagcompound.getInteger( "dir" ) );
+            m_dir = Direction.getFront( nbttagcompound.getInteger( "dir" ) );
         }
         if( nbttagcompound.hasKey( "anim" ) )
         {
@@ -153,7 +153,7 @@ public abstract class TilePeripheralBase extends TileGeneric
 
     @Nonnull
     @Override
-    public NBTTagCompound writeToNBT( NBTTagCompound nbttagcompound )
+    public CompoundNBT writeToNBT( CompoundNBT nbttagcompound )
     {
         // Write properties
         nbttagcompound = super.writeToNBT( nbttagcompound );
@@ -167,10 +167,10 @@ public abstract class TilePeripheralBase extends TileGeneric
     }
 
     @Override
-    public void readDescription( @Nonnull NBTTagCompound nbttagcompound )
+    public void readDescription( @Nonnull CompoundNBT nbttagcompound )
     {
         super.readDescription( nbttagcompound );
-        m_dir = EnumFacing.getFront( nbttagcompound.getInteger( "dir" ) );
+        m_dir = Direction.getFront( nbttagcompound.getInteger( "dir" ) );
         m_anim = nbttagcompound.getInteger( "anim" );
         if( nbttagcompound.hasKey( "label" ) )
         {
@@ -183,7 +183,7 @@ public abstract class TilePeripheralBase extends TileGeneric
     }
 
     @Override
-    public void writeDescription( @Nonnull NBTTagCompound nbttagcompound )
+    public void writeDescription( @Nonnull CompoundNBT nbttagcompound )
     {
         super.writeDescription( nbttagcompound );
         nbttagcompound.setInteger( "dir", m_dir.getIndex() );

@@ -11,11 +11,11 @@ import dan200.computercraft.shared.computer.core.IComputer;
 import dan200.computercraft.shared.computer.core.IContainerComputer;
 import dan200.computercraft.shared.turtle.blocks.TileTurtle;
 import dan200.computercraft.shared.turtle.core.TurtleBrain;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.Container;
-import net.minecraft.inventory.IContainerListener;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.inventory.container.Container;
+import net.minecraft.inventory.container.IContainerListener;
 import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.Slot;
+import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.ItemStack;
 
 import javax.annotation.Nonnull;
@@ -133,7 +133,7 @@ public class ContainerTurtle extends Container
     }
     
     @Override
-    public boolean canInteractWith( @Nonnull EntityPlayer player )
+    public boolean canInteractWith( @Nonnull PlayerEntity player )
     {
         TileTurtle turtle = ((TurtleBrain)m_turtle).getOwner();
         if( turtle != null )
@@ -144,7 +144,7 @@ public class ContainerTurtle extends Container
     }
 
     @Nonnull
-    protected ItemStack tryItemMerge( EntityPlayer player, int slotNum, int firstSlot, int lastSlot, boolean reverse )
+    protected ItemStack tryItemMerge( PlayerEntity player, int slotNum, int firstSlot, int lastSlot, boolean reverse )
     {
         Slot slot = inventorySlots.get( slotNum );
         ItemStack originalStack = ItemStack.EMPTY;
@@ -180,7 +180,7 @@ public class ContainerTurtle extends Container
 
     @Nonnull
     @Override
-    public ItemStack transferStackInSlot( EntityPlayer player, int slotNum )
+    public ItemStack transferStackInSlot( PlayerEntity player, int slotNum )
     {
         if( slotNum >= 0 && slotNum < 16 )
         {

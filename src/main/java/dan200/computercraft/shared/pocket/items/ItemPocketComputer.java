@@ -21,13 +21,13 @@ import dan200.computercraft.shared.pocket.apis.PocketAPI;
 import dan200.computercraft.shared.pocket.core.PocketServerComputer;
 import dan200.computercraft.shared.util.StringUtil;
 import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.item.ItemGroup;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.*;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.Constants;
@@ -60,7 +60,7 @@ public class ItemPocketComputer extends Item implements IComputerItem, IMedia, I
         ItemStack result = new ItemStack( this, 1, damage );
         if( id >= 0 || upgrade != null )
         {
-            NBTTagCompound compound = new NBTTagCompound();
+            CompoundNBT compound = new CompoundNBT();
             if( id >= 0 )
             {
                 compound.setInteger( "computerID", id );
@@ -78,8 +78,8 @@ public class ItemPocketComputer extends Item implements IComputerItem, IMedia, I
 
         if( colour != -1 )
         {
-            NBTTagCompound tag = result.getTagCompound();
-            if( tag == null ) result.setTagCompound( tag = new NBTTagCompound() );
+            CompoundNBT tag = result.getTagCompound();
+            if( tag == null ) result.setTagCompound( tag = new CompoundNBT() );
             tag.setInteger( "colour", colour );
         }
         
@@ -87,7 +87,7 @@ public class ItemPocketComputer extends Item implements IComputerItem, IMedia, I
     }
 
     @Override
-    public void getSubItems( @Nonnull CreativeTabs tabs, @Nonnull NonNullList<ItemStack> list )
+    public void getSubItems( @Nonnull ItemGroup tabs, @Nonnull NonNullList<ItemStack> list )
     {
         if( !isInCreativeTab( tabs ) ) return;
         getSubItems( list, ComputerFamily.Normal );
@@ -109,7 +109,7 @@ public class ItemPocketComputer extends Item implements IComputerItem, IMedia, I
         if( !world.isRemote )
         {
             // Server side
-            IInventory inventory = (entity instanceof EntityPlayer) ? ((EntityPlayer) entity).inventory : null;
+            IInventory inventory = (entity instanceof PlayerEntity) ? ((PlayerEntity) entity).inventory : null;
             PocketServerComputer computer = createServerComputer( world, inventory, entity, stack );
             if( computer != null )
             {
@@ -162,7 +162,7 @@ public class ItemPocketComputer extends Item implements IComputerItem, IMedia, I
 
     @Nonnull
     @Override
-    public ActionResult<ItemStack> onItemRightClick( World world, EntityPlayer player, @Nonnull EnumHand hand )
+    public ActionResult<ItemStack> onItemRightClick( World world, PlayerEntity player, @Nonnull Hand hand )
     {
         ItemStack stack = player.getHeldItem( hand );
         if( !world.isRemote )
@@ -184,7 +184,7 @@ public class ItemPocketComputer extends Item implements IComputerItem, IMedia, I
 
             if( !stop ) ComputerCraft.openPocketComputerGUI( player, hand );
         }
-        return new ActionResult<>( EnumActionResult.SUCCESS, stack );
+        return new ActionResult<>( ActionResultType.SUCCESS, stack );
     }
 
     @Nonnull
@@ -326,7 +326,7 @@ public class ItemPocketComputer extends Item implements IComputerItem, IMedia, I
     @Override
     public int getComputerID( @Nonnull ItemStack stack )
     {
-        NBTTagCompound compound = stack.getTagCompound();
+        CompoundNBT compound = stack.getTagCompound();
         if( compound != null && compound.hasKey( "computerID" ) )
         {
             return compound.getInteger( "computerID" );
@@ -338,7 +338,7 @@ public class ItemPocketComputer extends Item implements IComputerItem, IMedia, I
     {
         if( !stack.hasTagCompound() )
         {
-            stack.setTagCompound( new NBTTagCompound() );
+            stack.setTagCompound( new CompoundNBT() );
         }
         stack.getTagCompound().setInteger( "computerID", computerID );
     }
@@ -412,7 +412,7 @@ public class ItemPocketComputer extends Item implements IComputerItem, IMedia, I
 
     private int getInstanceID( @Nonnull ItemStack stack )
     {
-        NBTTagCompound compound = stack.getTagCompound();
+        CompoundNBT compound = stack.getTagCompound();
         if( compound != null && compound.hasKey( "instanceID" ) )
         {
             return compound.getInteger( "instanceID" );
@@ -424,14 +424,14 @@ public class ItemPocketComputer extends Item implements IComputerItem, IMedia, I
     {
         if( !stack.hasTagCompound() )
         {
-            stack.setTagCompound( new NBTTagCompound() );
+            stack.setTagCompound( new CompoundNBT() );
         }
         stack.getTagCompound().setInteger( "instanceID", instanceID );
     }
 
     private int getSessionID( @Nonnull ItemStack stack )
     {
-        NBTTagCompound compound = stack.getTagCompound();
+        CompoundNBT compound = stack.getTagCompound();
         if( compound != null && compound.hasKey( "sessionID" ) )
         {
             return compound.getInteger( "sessionID" );
@@ -443,7 +443,7 @@ public class ItemPocketComputer extends Item implements IComputerItem, IMedia, I
     {
         if( !stack.hasTagCompound() )
         {
-            stack.setTagCompound( new NBTTagCompound() );
+            stack.setTagCompound( new CompoundNBT() );
         }
         stack.getTagCompound().setInteger( "sessionID", sessionID );
     }
@@ -465,7 +465,7 @@ public class ItemPocketComputer extends Item implements IComputerItem, IMedia, I
         ClientComputer computer = getClientComputer( stack );
         if( computer != null && computer.isOn() )
         {
-            NBTTagCompound computerNBT = computer.getUserData();
+            CompoundNBT computerNBT = computer.getUserData();
             if( computerNBT != null && computerNBT.hasKey( "modemLight", Constants.NBT.TAG_ANY_NUMERIC ) )
             {
                 return computerNBT.getInteger( "modemLight" );
@@ -476,7 +476,7 @@ public class ItemPocketComputer extends Item implements IComputerItem, IMedia, I
 
     public IPocketUpgrade getUpgrade( @Nonnull ItemStack stack )
     {
-        NBTTagCompound compound = stack.getTagCompound();
+        CompoundNBT compound = stack.getTagCompound();
         if( compound != null )
         {
             if( compound.hasKey( "upgrade", Constants.NBT.TAG_STRING ) )
@@ -499,8 +499,8 @@ public class ItemPocketComputer extends Item implements IComputerItem, IMedia, I
 
     public void setUpgrade( @Nonnull ItemStack stack, IPocketUpgrade upgrade )
     {
-        NBTTagCompound compound = stack.getTagCompound();
-        if( compound == null ) stack.setTagCompound( compound = new NBTTagCompound() );
+        CompoundNBT compound = stack.getTagCompound();
+        if( compound == null ) stack.setTagCompound( compound = new CompoundNBT() );
 
         if( upgrade == null )
         {
@@ -514,12 +514,12 @@ public class ItemPocketComputer extends Item implements IComputerItem, IMedia, I
         compound.removeTag( "upgrade_info" );
     }
 
-    public NBTTagCompound getUpgradeInfo( @Nonnull ItemStack stack )
+    public CompoundNBT getUpgradeInfo( @Nonnull ItemStack stack )
     {
-        NBTTagCompound tag = stack.getTagCompound();
+        CompoundNBT tag = stack.getTagCompound();
         if( tag == null )
         {
-            tag = new NBTTagCompound();
+            tag = new CompoundNBT();
             stack.setTagCompound( tag );
         }
 
@@ -529,7 +529,7 @@ public class ItemPocketComputer extends Item implements IComputerItem, IMedia, I
         }
         else
         {
-            NBTTagCompound sub = new NBTTagCompound();
+            CompoundNBT sub = new CompoundNBT();
             tag.setTag( "upgrade_info", sub );
             return sub;
         }
@@ -538,7 +538,7 @@ public class ItemPocketComputer extends Item implements IComputerItem, IMedia, I
     @Override
     public int getColour( ItemStack stack )
     {
-        NBTTagCompound tag = stack.getTagCompound();
+        CompoundNBT tag = stack.getTagCompound();
         return tag != null && tag.hasKey( "colour", Constants.NBT.TAG_ANY_NUMERIC ) ? tag.getInteger( "colour" ) : -1;
     }
 
@@ -552,14 +552,14 @@ public class ItemPocketComputer extends Item implements IComputerItem, IMedia, I
 
     public void setColourDirect( ItemStack stack, int colour )
     {
-        NBTTagCompound tag = stack.getTagCompound();
+        CompoundNBT tag = stack.getTagCompound();
         if( colour == -1 )
         {
             if( tag != null ) tag.removeTag( "colour" );
         }
         else
         {
-            if( tag == null ) stack.setTagCompound( tag = new NBTTagCompound() );
+            if( tag == null ) stack.setTagCompound( tag = new CompoundNBT() );
             tag.setInteger( "colour", colour );
         }
     }

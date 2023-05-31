@@ -1,14 +1,14 @@
 package dan200.computercraft.client.render;
 
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.renderer.block.model.BakedQuad;
-import net.minecraft.client.renderer.block.model.IBakedModel;
-import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
-import net.minecraft.client.renderer.block.model.ItemOverrideList;
+import net.minecraft.block.BlockState;
+import net.minecraft.client.renderer.model.BakedQuad;
+import net.minecraft.client.renderer.model.IBakedModel;
+import net.minecraft.client.renderer.model.ItemCameraTransforms;
+import net.minecraft.client.renderer.model.ItemOverrideList;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.vertex.VertexFormat;
 import net.minecraft.client.renderer.vertex.VertexFormatElement;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.util.Direction;
 
 import javax.annotation.Nonnull;
 import javax.vecmath.Matrix4f;
@@ -27,7 +27,7 @@ public class TurtleMultiModel implements IBakedModel
     private IBakedModel m_rightUpgradeModel;
     private Matrix4f m_rightUpgradeTransform;
     private List<BakedQuad> m_generalQuads;
-    private Map<EnumFacing, List<BakedQuad>> m_faceQuads;
+    private Map<Direction, List<BakedQuad>> m_faceQuads;
 
     public TurtleMultiModel( IBakedModel baseModel, IBakedModel overlayModel, IBakedModel leftUpgradeModel, Matrix4f leftUpgradeTransform, IBakedModel rightUpgradeModel, Matrix4f rightUpgradeTransform )
     {
@@ -44,7 +44,7 @@ public class TurtleMultiModel implements IBakedModel
 
     @Nonnull
     @Override
-    public List<BakedQuad> getQuads( IBlockState state, EnumFacing side, long rand )
+    public List<BakedQuad> getQuads( BlockState state, Direction side, long rand )
     {
         if( side != null )
         {

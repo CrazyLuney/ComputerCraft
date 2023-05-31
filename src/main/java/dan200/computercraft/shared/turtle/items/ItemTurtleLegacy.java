@@ -13,7 +13,7 @@ import dan200.computercraft.shared.computer.core.ComputerFamily;
 import dan200.computercraft.shared.computer.items.ItemComputer;
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.ResourceLocation;
 
 import javax.annotation.Nonnull;
@@ -60,7 +60,7 @@ public class ItemTurtleLegacy extends ItemTurtleBase
         ItemStack stack = new ItemStack( this, 1, damage );
         if( fuelLevel > 0 || id > ItemComputer.HIGHEST_DAMAGE_VALUE_ID )
         {
-            NBTTagCompound nbt = new NBTTagCompound();
+            CompoundNBT nbt = new CompoundNBT();
             if( fuelLevel > 0 )
             {
                 nbt.setInteger( "fuelLevel", fuelLevel );
@@ -144,7 +144,7 @@ public class ItemTurtleLegacy extends ItemTurtleBase
     {
         if( stack.hasTagCompound() )
         {
-            NBTTagCompound nbt = stack.getTagCompound();
+            CompoundNBT nbt = stack.getTagCompound();
             return nbt.getInteger("fuelLevel");
         }
         return 0;

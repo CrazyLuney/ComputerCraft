@@ -2,7 +2,7 @@ package dan200.computercraft.client.gui;
 
 import dan200.computercraft.ComputerCraft;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.client.gui.screen.Screen;
 import net.minecraftforge.common.config.ConfigElement;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.common.config.Property;
@@ -16,7 +16,7 @@ import java.util.Set;
 
 public class GuiConfigCC extends GuiConfig
 {
-    public GuiConfigCC( GuiScreen parentScreen )
+    public GuiConfigCC( Screen parentScreen )
     {
         super( parentScreen, getConfigElements(), ComputerCraft.MOD_ID, false, false, "ComputerCraft" );
     }
@@ -47,7 +47,7 @@ public class GuiConfigCC extends GuiConfig
         }
 
         @Override
-        public GuiScreen createConfigGui( GuiScreen parentScreen )
+        public Screen createConfigGui( Screen parentScreen )
         {
             return new GuiConfigCC( parentScreen );
         }

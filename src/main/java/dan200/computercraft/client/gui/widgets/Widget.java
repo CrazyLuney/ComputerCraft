@@ -7,18 +7,18 @@
 package dan200.computercraft.client.gui.widgets;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.audio.PositionedSoundRecord;
+import net.minecraft.client.audio.SimpleSound;
 import net.minecraft.client.gui.FontRenderer;
-import net.minecraft.client.gui.Gui;
+import net.minecraft.client.gui.AbstractGui;
 import net.minecraft.client.renderer.*;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
-import net.minecraft.init.SoundEvents;
+import net.minecraft.util.SoundEvents;
 import net.minecraft.item.ItemStack;
 import org.lwjgl.opengl.GL11;
 
 import javax.annotation.Nonnull;
 
-public abstract class Widget extends Gui
+public abstract class Widget extends AbstractGui
 {
     private WidgetContainer m_parent;
     private boolean m_visible;
@@ -336,7 +336,7 @@ public abstract class Widget extends Gui
             try
             {
                 Minecraft mc = Minecraft.getMinecraft();
-                RenderItem renderItem = mc.getRenderItem();
+                ItemRenderer renderItem = mc.getRenderItem();
                 if( renderItem != null )
                 {
                     renderItem.renderItemAndEffectIntoGUI( stack, x, y );
@@ -377,6 +377,6 @@ public abstract class Widget extends Gui
     protected void playClickSound()
     {
         Minecraft mc = Minecraft.getMinecraft();
-        mc.getSoundHandler().playSound( PositionedSoundRecord.getMasterRecord( SoundEvents.UI_BUTTON_CLICK, 1.0F ) );
+        mc.getSoundHandler().playSound( SimpleSound.getMasterRecord( SoundEvents.UI_BUTTON_CLICK, 1.0F ) );
     }
 }

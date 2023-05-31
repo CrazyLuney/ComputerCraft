@@ -1,7 +1,7 @@
 package dan200.computercraft.shared.util;
 
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.oredict.OreDictionary;
 import org.apache.commons.lang3.ArrayUtils;
@@ -39,7 +39,7 @@ public final class ColourUtils
         return -1;
     }
 
-    public static int getHexColour( @Nonnull NBTTagCompound tag )
+    public static int getHexColour( @Nonnull CompoundNBT tag )
     {
         if( tag.hasKey( "colourIndex", Constants.NBT.TAG_ANY_NUMERIC ) )
         {
@@ -59,7 +59,7 @@ public final class ColourUtils
         }
     }
 
-    public static Colour getColour( @Nonnull NBTTagCompound tag )
+    public static Colour getColour( @Nonnull CompoundNBT tag )
     {
         if( tag.hasKey( "colourIndex", Constants.NBT.TAG_ANY_NUMERIC ) )
         {

@@ -19,9 +19,9 @@ import dan200.computercraft.shared.common.ServerTerminal;
 import dan200.computercraft.shared.network.ComputerCraftPacket;
 import dan200.computercraft.shared.network.INetworkedThing;
 import dan200.computercraft.shared.util.NBTUtil;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.Container;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.inventory.container.Container;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.Loader;
@@ -37,7 +37,7 @@ public class ServerComputer extends ServerTerminal
     private BlockPos m_position;
 
     private final Computer m_computer;
-    private NBTTagCompound m_userData;
+    private CompoundNBT m_userData;
     private boolean m_changed;
 
     private boolean m_changedLastFrame;
@@ -118,11 +118,11 @@ public class ServerComputer extends ServerTerminal
         m_computer.unload();
     }
 
-    public NBTTagCompound getUserData()
+    public CompoundNBT getUserData()
     {
         if( m_userData == null )
         {
-            m_userData = new NBTTagCompound();
+            m_userData = new CompoundNBT();
         }
         return m_userData;
     }
@@ -138,18 +138,18 @@ public class ServerComputer extends ServerTerminal
         ComputerCraftPacket packet = new ComputerCraftPacket();
         packet.m_packetType = ComputerCraftPacket.ComputerChanged;
         packet.m_dataInt = new int[] { getInstanceID() };
-        packet.m_dataNBT = new NBTTagCompound();
+        packet.m_dataNBT = new CompoundNBT();
         writeDescription( packet.m_dataNBT );
         ComputerCraft.sendToAllPlayers( packet );
     }
 
-    public void sendState( EntityPlayer player )
+    public void sendState( PlayerEntity player )
     {
         // Send state to client
         ComputerCraftPacket packet = new ComputerCraftPacket();
         packet.m_packetType = ComputerCraftPacket.ComputerChanged;
         packet.m_dataInt = new int[] { getInstanceID() };
-        packet.m_dataNBT = new NBTTagCompound();
+        packet.m_dataNBT = new CompoundNBT();
         writeDescription( packet.m_dataNBT );
         ComputerCraft.sendToPlayer( player, packet );
     }
@@ -338,7 +338,7 @@ public class ServerComputer extends ServerTerminal
     // Networking stuff
 
     @Override
-    public void writeDescription( NBTTagCompound nbttagcompound )
+    public void writeDescription( CompoundNBT nbttagcompound )
     {
         super.writeDescription( nbttagcompound );
 
@@ -359,7 +359,7 @@ public class ServerComputer extends ServerTerminal
     // INetworkedThing
 
     @Override
-    public void handlePacket( ComputerCraftPacket packet, EntityPlayer sender )
+    public void handlePacket( ComputerCraftPacket packet, PlayerEntity sender )
     {
         // Allow Computer/Tile updates as they may happen at any time.
         if (packet.requiresContainer()) {

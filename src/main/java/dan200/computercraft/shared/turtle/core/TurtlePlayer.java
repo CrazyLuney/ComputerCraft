@@ -12,11 +12,11 @@ import dan200.computercraft.shared.util.InventoryUtil;
 import dan200.computercraft.shared.util.WorldUtil;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.TileEntitySign;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.tileentity.SignTileEntity;
+import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraft.world.WorldServer;
+import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.common.util.FakePlayer;
 
 import javax.annotation.Nonnull;
@@ -32,10 +32,10 @@ public class TurtlePlayer extends FakePlayer
     @Deprecated
     public TurtlePlayer( World world )
     {
-        this( (WorldServer) world );
+        this( (ServerWorld) world );
     }
 
-    public TurtlePlayer( WorldServer world )
+    public TurtlePlayer( ServerWorld world )
     {
         super( world, s_profile );
     }
@@ -55,7 +55,7 @@ public class TurtlePlayer extends FakePlayer
 
         // Store (or drop) anything else we found
         BlockPos dropPosition = turtle.getPosition();
-        EnumFacing dropDirection = turtle.getDirection().getOpposite();
+        Direction dropDirection = turtle.getDirection().getOpposite();
         for( int i=0; i<inventory.getSizeInventory(); ++i )
         {
             ItemStack stack = inventory.getStackInSlot( i );
@@ -96,7 +96,7 @@ public class TurtlePlayer extends FakePlayer
     }
 
     @Override
-    public void openEditSign( TileEntitySign signTile )
+    public void openEditSign( SignTileEntity signTile )
     {
     }
 }

@@ -24,17 +24,17 @@ import dan200.computercraft.shared.peripheral.common.BlockCableModemVariant;
 import dan200.computercraft.shared.peripheral.common.PeripheralItemFactory;
 import dan200.computercraft.shared.util.IDAssigner;
 import dan200.computercraft.shared.util.PeripheralUtil;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.block.BlockState;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.util.Direction;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
-import net.minecraft.util.text.TextComponentTranslation;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 
 import javax.annotation.Nonnull;
@@ -99,7 +99,7 @@ public class TileCable extends TileModemBase
         @Override
         public Vec3d getPosition()
         {
-            EnumFacing direction = m_entity.getDirection();
+            Direction direction = m_entity.getDirection();
             BlockPos pos = m_entity.getPos().offset( direction );
             return new Vec3d( (double)pos.getX() + 0.5, (double)pos.getY() + 0.5, (double)pos.getZ() + 0.5 );
         }
@@ -273,9 +273,9 @@ public class TileCable extends TileModemBase
     }
 
     @Override
-    public EnumFacing getDirection()
+    public Direction getDirection()
     {
-        IBlockState state = getBlockState();
+        BlockState state = getBlockState();
         BlockCableModemVariant modem = state.getValue( BlockCable.Properties.MODEM );
         if( modem != BlockCableModemVariant.None )
         {
@@ -283,14 +283,14 @@ public class TileCable extends TileModemBase
         }
         else
         {
-            return EnumFacing.NORTH;
+            return Direction.NORTH;
         }
     }
 
     @Override
-    public void setDirection( EnumFacing dir )
+    public void setDirection( Direction dir )
     {
-        IBlockState state = getBlockState();
+        BlockState state = getBlockState();
         BlockCableModemVariant modem = state.getValue( BlockCable.Properties.MODEM );
         if( modem != BlockCableModemVariant.None )
         {
@@ -338,7 +338,7 @@ public class TileCable extends TileModemBase
     @Override
     public void onNeighbourChange()
     {
-        EnumFacing dir = getDirection();
+        Direction dir = getDirection();
         if( !getWorld().isSideSolid(
             getPos().offset( dir ),
             dir.getOpposite()
@@ -444,7 +444,7 @@ public class TileCable extends TileModemBase
         {
             bounds.add( BOX_CENTRE );
             BlockPos pos = getPos();
-            for (EnumFacing facing : EnumFacing.VALUES)
+            for (Direction facing : Direction.VALUES)
             {
                 if( BlockCable.isCable( getWorld(), pos.offset( facing ) ) )
                 {
@@ -455,7 +455,7 @@ public class TileCable extends TileModemBase
     }
 
     @Override
-    public boolean onActivate( EntityPlayer player, EnumFacing side, float hitX, float hitY, float hitZ )
+    public boolean onActivate( PlayerEntity player, Direction side, float hitX, float hitY, float hitZ )
     {
         if( getPeripheralType() == PeripheralType.WiredModemWithCable && !player.isSneaking() )
         {
@@ -471,13 +471,13 @@ public class TileCable extends TileModemBase
                     if( oldPeriphName != null )
                     {
                         player.sendMessage(
-                            new TextComponentTranslation( "gui.computercraft:wired_modem.peripheral_disconnected", oldPeriphName )
+                            new TranslationTextComponent( "gui.computercraft:wired_modem.peripheral_disconnected", oldPeriphName )
                         );
                     }
                     if( periphName != null )
                     {
                         player.sendMessage(
-                            new TextComponentTranslation( "gui.computercraft:wired_modem.peripheral_connected", periphName )
+                            new TranslationTextComponent( "gui.computercraft:wired_modem.peripheral_connected", periphName )
                         );
                     }
                     return true;
@@ -494,7 +494,7 @@ public class TileCable extends TileModemBase
     }
 
     @Override
-    public void readFromNBT(NBTTagCompound nbttagcompound)
+    public void readFromNBT(CompoundNBT nbttagcompound)
     {
         // Read properties
         super.readFromNBT(nbttagcompound);
@@ -504,7 +504,7 @@ public class TileCable extends TileModemBase
 
     @Nonnull
     @Override
-    public NBTTagCompound writeToNBT(NBTTagCompound nbttagcompound)
+    public CompoundNBT writeToNBT(CompoundNBT nbttagcompound)
     {
         // Write properties
         nbttagcompound = super.writeToNBT(nbttagcompound);
@@ -537,7 +537,7 @@ public class TileCable extends TileModemBase
     // IPeripheralTile
 
     @Override
-    public IPeripheral getPeripheral( EnumFacing side )
+    public IPeripheral getPeripheral( Direction side )
     {
         if( getPeripheralType() != PeripheralType.Cable )
         {
@@ -696,7 +696,7 @@ public class TileCable extends TileModemBase
             else
             {
                 // If this modem is dead, rebuild the neighbours' networks
-                for( EnumFacing dir : EnumFacing.values() )
+                for( Direction dir : Direction.values() )
                 {
                     BlockPos offset = getPos().offset( dir );
                     if( offset.getY() >= 0 && offset.getY() < getWorld().getHeight() && BlockCable.isCable( getWorld(), offset ) )
@@ -965,7 +965,7 @@ public class TileCable extends TileModemBase
         {
             if( getPeripheralType() == PeripheralType.WiredModemWithCable )
             {
-                EnumFacing facing = getDirection();
+                Direction facing = getDirection();
                 BlockPos neighbour = getPos().offset( facing );
                 return PeripheralUtil.getPeripheral( getWorld(), neighbour, facing.getOpposite() );
             }

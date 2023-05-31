@@ -15,7 +15,7 @@ import dan200.computercraft.shared.computer.blocks.TileCommandComputer;
 import dan200.computercraft.shared.util.WorldUtil;
 import net.minecraft.block.Block;
 import net.minecraft.block.properties.IProperty;
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.BlockState;
 import net.minecraft.command.ICommand;
 import net.minecraft.command.ICommandManager;
 import net.minecraft.command.ICommandSender;
@@ -117,7 +117,7 @@ public class CommandAPI implements ILuaAPI
     private Object getBlockInfo( World world, BlockPos pos )
     {
         // Get the details of the block
-        IBlockState state = world.getBlockState( pos );
+        BlockState state = world.getBlockState( pos );
         Block block = state.getBlock();
         String name = Block.REGISTRY.getNameForObject( block ).toString();
         int metadata = block.getMetaFromState( state );

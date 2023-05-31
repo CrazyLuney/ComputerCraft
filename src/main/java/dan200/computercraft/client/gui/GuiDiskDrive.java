@@ -8,19 +8,19 @@ package dan200.computercraft.client.gui;
 
 import dan200.computercraft.shared.peripheral.diskdrive.ContainerDiskDrive;
 import dan200.computercraft.shared.peripheral.diskdrive.TileDiskDrive;
-import net.minecraft.client.gui.inventory.GuiContainer;
+import net.minecraft.client.gui.screen.inventory.ContainerScreen;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.resources.I18n;
-import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.util.ResourceLocation;
 
-public class GuiDiskDrive extends GuiContainer
+public class GuiDiskDrive extends ContainerScreen
 {
     private static final ResourceLocation background = new ResourceLocation( "computercraft", "textures/gui/diskdrive.png" );
 
     private TileDiskDrive m_diskDrive;
 
-    public GuiDiskDrive( InventoryPlayer inventoryplayer, TileDiskDrive diskDrive )
+    public GuiDiskDrive( PlayerInventory inventoryplayer, TileDiskDrive diskDrive )
     {
         super( new ContainerDiskDrive(inventoryplayer, diskDrive) );
         m_diskDrive = diskDrive;

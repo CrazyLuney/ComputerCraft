@@ -11,9 +11,9 @@ import dan200.computercraft.api.peripheral.IPeripheral;
 import dan200.computercraft.shared.peripheral.PeripheralType;
 import dan200.computercraft.shared.peripheral.common.BlockPeripheral;
 import dan200.computercraft.shared.peripheral.common.BlockPeripheralVariant;
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.BlockState;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.util.Direction;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
@@ -67,21 +67,21 @@ public class TileWirelessModem extends TileModemBase
     }
 
     @Override
-    public EnumFacing getDirection()
+    public Direction getDirection()
     {
         // Wireless Modem
-        IBlockState state = getBlockState();
+        BlockState state = getBlockState();
         switch( state.getValue( BlockPeripheral.Properties.VARIANT ) )
         {
             case WirelessModemDownOff:
             case WirelessModemDownOn:
             {
-                return EnumFacing.DOWN;
+                return Direction.DOWN;
             }
             case WirelessModemUpOff:
             case WirelessModemUpOn:
             {
-                return EnumFacing.UP;
+                return Direction.UP;
             }
             default:
             {
@@ -91,21 +91,21 @@ public class TileWirelessModem extends TileModemBase
     }
 
     @Override
-    public void setDirection( EnumFacing dir )
+    public void setDirection( Direction dir )
     {
         // Wireless Modem
-        if( dir == EnumFacing.UP )
+        if( dir == Direction.UP )
         {
             setBlockState( getBlockState()
                 .withProperty( BlockPeripheral.Properties.VARIANT, BlockPeripheralVariant.WirelessModemUpOff )
-                .withProperty( BlockPeripheral.Properties.FACING, EnumFacing.NORTH )
+                .withProperty( BlockPeripheral.Properties.FACING, Direction.NORTH )
             );
         }
-        else if( dir == EnumFacing.DOWN )
+        else if( dir == Direction.DOWN )
         {
             setBlockState( getBlockState()
                 .withProperty( BlockPeripheral.Properties.VARIANT, BlockPeripheralVariant.WirelessModemDownOff )
-                .withProperty( BlockPeripheral.Properties.FACING, EnumFacing.NORTH )
+                .withProperty( BlockPeripheral.Properties.FACING, Direction.NORTH )
             );
         }
         else
@@ -124,7 +124,7 @@ public class TileWirelessModem extends TileModemBase
     }
 
     @Override
-    public boolean shouldRefresh( World world, BlockPos pos, @Nonnull IBlockState oldState, @Nonnull IBlockState newState )
+    public boolean shouldRefresh( World world, BlockPos pos, @Nonnull BlockState oldState, @Nonnull BlockState newState )
     {
         return super.shouldRefresh( world, pos, oldState, newState ) || ComputerCraft.Blocks.peripheral.getPeripheralType( newState ) != PeripheralType.WirelessModem;
     }

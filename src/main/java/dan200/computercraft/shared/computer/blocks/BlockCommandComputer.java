@@ -14,12 +14,12 @@ import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyDirection;
 import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.BlockStateContainer;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.block.BlockState;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.util.Direction;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
@@ -31,7 +31,7 @@ public class BlockCommandComputer extends BlockComputerBase
 
     public static class Properties
     {
-        public static final PropertyDirection FACING = PropertyDirection.create("facing", EnumFacing.Plane.HORIZONTAL);
+        public static final PropertyDirection FACING = PropertyDirection.create("facing", Direction.Plane.HORIZONTAL);
         public static final PropertyEnum<ComputerState> STATE = PropertyEnum.create("state", ComputerState.class);
     }
 
@@ -45,7 +45,7 @@ public class BlockCommandComputer extends BlockComputerBase
         setUnlocalizedName( "computercraft:command_computer" );
         setCreativeTab( ComputerCraft.mainCreativeTab );
         setDefaultState( this.blockState.getBaseState()
-            .withProperty( Properties.FACING, EnumFacing.NORTH )
+            .withProperty( Properties.FACING, Direction.NORTH )
             .withProperty( Properties.STATE, ComputerState.Off )
         );
     }
@@ -60,18 +60,18 @@ public class BlockCommandComputer extends BlockComputerBase
     @Nonnull
     @Override
     @Deprecated
-    public IBlockState getStateFromMeta( int meta )
+    public BlockState getStateFromMeta( int meta )
     {
-        EnumFacing dir = EnumFacing.getFront( meta & 0x7 );
-        if( dir.getAxis() == EnumFacing.Axis.Y )
+        Direction dir = Direction.getFront( meta & 0x7 );
+        if( dir.getAxis() == Direction.Axis.Y )
         {
-            dir = EnumFacing.NORTH;
+            dir = Direction.NORTH;
         }
         return getDefaultState().withProperty( Properties.FACING, dir );
     }
 
     @Override
-    public int getMetaFromState( IBlockState state )
+    public int getMetaFromState( BlockState state )
     {
         return state.getValue( Properties.FACING ).getIndex();
     }
@@ -79,7 +79,7 @@ public class BlockCommandComputer extends BlockComputerBase
     @Nonnull
     @Override
     @Deprecated
-    public IBlockState getActualState( @Nonnull IBlockState state, IBlockAccess world, BlockPos pos )
+    public BlockState getActualState( @Nonnull BlockState state, IBlockAccess world, BlockPos pos )
     {
         TileEntity tile = world.getTileEntity( pos );
         if( tile != null && tile instanceof IComputerTile )
@@ -101,9 +101,9 @@ public class BlockCommandComputer extends BlockComputerBase
     }
 
     @Override
-    protected IBlockState getDefaultBlockState( ComputerFamily family, EnumFacing placedSide )
+    protected BlockState getDefaultBlockState( ComputerFamily family, Direction placedSide )
     {
-        if( placedSide.getAxis() != EnumFacing.Axis.Y )
+        if( placedSide.getAxis() != Direction.Axis.Y )
         {
             return getDefaultState().withProperty( Properties.FACING, placedSide );
         }
@@ -120,7 +120,7 @@ public class BlockCommandComputer extends BlockComputerBase
     }
 
     @Override
-    public ComputerFamily getFamily( IBlockState state )
+    public ComputerFamily getFamily( BlockState state )
     {
         return ComputerFamily.Command;
     }
@@ -132,7 +132,7 @@ public class BlockCommandComputer extends BlockComputerBase
     }
 
     @Override
-    public void onBlockPlacedBy( World world, BlockPos pos, IBlockState state, EntityLivingBase player, @Nonnull ItemStack itemstack )
+    public void onBlockPlacedBy( World world, BlockPos pos, BlockState state, LivingEntity player, @Nonnull ItemStack itemstack )
     {
         // Not sure why this is necessary
         TileEntity tile = world.getTileEntity( pos );
@@ -143,7 +143,7 @@ public class BlockCommandComputer extends BlockComputerBase
         }
 
         // Set direction
-        EnumFacing dir = DirectionUtil.fromEntityRot( player );
+        Direction dir = DirectionUtil.fromEntityRot( player );
         setDirection( world, pos, dir );
     }
 }

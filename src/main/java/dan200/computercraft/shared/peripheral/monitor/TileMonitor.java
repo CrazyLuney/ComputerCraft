@@ -16,13 +16,13 @@ import dan200.computercraft.shared.common.ITerminalTile;
 import dan200.computercraft.shared.common.ServerTerminal;
 import dan200.computercraft.shared.peripheral.PeripheralType;
 import dan200.computercraft.shared.peripheral.common.TilePeripheralBase;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.block.BlockState;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.util.Direction;
 import net.minecraft.world.World;
 
 import javax.annotation.Nonnull;
@@ -99,7 +99,7 @@ public class TileMonitor extends TilePeripheralBase
     }
 
     @Override
-    public boolean onActivate( EntityPlayer player, EnumFacing side, float hitX, float hitY, float hitZ )
+    public boolean onActivate( PlayerEntity player, Direction side, float hitX, float hitY, float hitZ )
     {
         if( !player.isSneaking() && getFront() == side )
         {
@@ -114,7 +114,7 @@ public class TileMonitor extends TilePeripheralBase
 
     @Nonnull
     @Override
-    public NBTTagCompound writeToNBT( NBTTagCompound nbttagcompound )
+    public CompoundNBT writeToNBT( CompoundNBT nbttagcompound )
     {
         nbttagcompound = super.writeToNBT( nbttagcompound);
         nbttagcompound.setInteger( "xIndex", m_xIndex );
@@ -126,7 +126,7 @@ public class TileMonitor extends TilePeripheralBase
     }
 
     @Override
-    public void readFromNBT( NBTTagCompound nbttagcompound )
+    public void readFromNBT( CompoundNBT nbttagcompound )
     {
         super.readFromNBT(nbttagcompound);
         m_xIndex = nbttagcompound.getInteger("xIndex");
@@ -183,7 +183,7 @@ public class TileMonitor extends TilePeripheralBase
     // IPeripheralTile implementation
 
     @Override
-    public IPeripheral getPeripheral( EnumFacing side )
+    public IPeripheral getPeripheral( Direction side )
     {
         return new MonitorPeripheral( this );
     }
@@ -208,7 +208,7 @@ public class TileMonitor extends TilePeripheralBase
     // Networking stuff
 
     @Override
-    public void writeDescription( @Nonnull NBTTagCompound nbttagcompound )
+    public void writeDescription( @Nonnull CompoundNBT nbttagcompound )
     {
         super.writeDescription( nbttagcompound );
         nbttagcompound.setInteger( "xIndex", m_xIndex );
@@ -221,7 +221,7 @@ public class TileMonitor extends TilePeripheralBase
     }
 
     @Override
-    public final void readDescription( @Nonnull NBTTagCompound nbttagcompound )
+    public final void readDescription( @Nonnull CompoundNBT nbttagcompound )
     {
         super.readDescription( nbttagcompound );
 
@@ -333,16 +333,16 @@ public class TileMonitor extends TilePeripheralBase
     }
 
     @Override
-    public EnumFacing getDirection()
+    public Direction getDirection()
     {
         int dir = getDir() % 6;
         switch( dir ) {
-            case 2: return EnumFacing.NORTH;
-            case 3: return EnumFacing.SOUTH;
-            case 4: return EnumFacing.WEST;
-            case 5: return EnumFacing.EAST;
+            case 2: return Direction.NORTH;
+            case 3: return Direction.SOUTH;
+            case 4: return Direction.WEST;
+            case 5: return Direction.EAST;
         }
-        return EnumFacing.NORTH;
+        return Direction.NORTH;
     }
 
     public int getDir()
@@ -357,41 +357,41 @@ public class TileMonitor extends TilePeripheralBase
         markDirty();
     }
 
-    public EnumFacing getFront()
+    public Direction getFront()
     {
-        return m_dir <= 5 ? EnumFacing.getFront( m_dir ) : (m_dir <= 11 ? EnumFacing.DOWN : EnumFacing.UP);
+        return m_dir <= 5 ? Direction.getFront( m_dir ) : (m_dir <= 11 ? Direction.DOWN : Direction.UP);
     }
 
-    public EnumFacing getRight()
+    public Direction getRight()
     {
         int dir = getDir() % 6;
         switch( dir ) {
-            case 2: return EnumFacing.WEST;
-            case 3: return EnumFacing.EAST;
-            case 4: return EnumFacing.SOUTH;
-            case 5: return EnumFacing.NORTH;
+            case 2: return Direction.WEST;
+            case 3: return Direction.EAST;
+            case 4: return Direction.SOUTH;
+            case 5: return Direction.NORTH;
         }
-        return EnumFacing.WEST;
+        return Direction.WEST;
     }
     
-    private EnumFacing getDown()
+    private Direction getDown()
     {
         int dir = getDir();
-        if (dir <= 5) return EnumFacing.UP;
+        if (dir <= 5) return Direction.UP;
         
         switch( dir ) {
             // up facing
-            case 8: return EnumFacing.NORTH;
-            case 9: return EnumFacing.SOUTH;
-            case 10: return EnumFacing.WEST;
-            case 11: return EnumFacing.EAST;
+            case 8: return Direction.NORTH;
+            case 9: return Direction.SOUTH;
+            case 10: return Direction.WEST;
+            case 11: return Direction.EAST;
             // down facing
-            case 14: return EnumFacing.SOUTH;
-            case 15: return EnumFacing.NORTH;
-            case 16: return EnumFacing.EAST;
-            case 17: return EnumFacing.WEST;
+            case 14: return Direction.SOUTH;
+            case 15: return Direction.NORTH;
+            case 16: return Direction.EAST;
+            case 17: return Direction.WEST;
         }
-        return EnumFacing.NORTH;
+        return Direction.NORTH;
     }
     
     public int getWidth()
@@ -447,8 +447,8 @@ public class TileMonitor extends TilePeripheralBase
     private TileMonitor getNeighbour( int x, int y )
     {
         BlockPos pos = getPos();
-        EnumFacing right = getRight();
-        EnumFacing down = getDown();
+        Direction right = getRight();
+        Direction down = getDown();
         int xOffset = -m_xIndex + x;
         int yOffset = -m_yIndex + y;
         return getSimilarMonitorAt(
@@ -465,8 +465,8 @@ public class TileMonitor extends TilePeripheralBase
     {
         // Update the positions and indexes of the other monitors
         BlockPos pos = getPos();
-        EnumFacing right = getRight();
-        EnumFacing down = getDown();
+        Direction right = getRight();
+        Direction down = getDown();
         for( int y=0; y<height; ++y )
         {
             for( int x=0; x<width; ++x )
@@ -844,7 +844,7 @@ public class TileMonitor extends TilePeripheralBase
     }
 
     @Override
-    public boolean shouldRefresh( World world, BlockPos pos, @Nonnull IBlockState oldState, @Nonnull IBlockState newState )
+    public boolean shouldRefresh( World world, BlockPos pos, @Nonnull BlockState oldState, @Nonnull BlockState newState )
     {
         if( super.shouldRefresh( world, pos, oldState, newState ) )
         {

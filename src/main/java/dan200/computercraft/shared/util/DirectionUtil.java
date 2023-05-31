@@ -7,15 +7,15 @@
 package dan200.computercraft.shared.util;
 
 import dan200.computercraft.shared.common.IDirectionalTile;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.util.Direction;
 import net.minecraft.util.math.MathHelper;
 
 public class DirectionUtil
 {
-    public static EnumFacing rotateRight( EnumFacing dir )
+    public static Direction rotateRight( Direction dir )
     {
-        if( dir.getAxis() != EnumFacing.Axis.Y )
+        if( dir.getAxis() != Direction.Axis.Y )
         {
             return dir.rotateY();
         }
@@ -25,9 +25,9 @@ public class DirectionUtil
         }
     }
 
-    public static EnumFacing rotateLeft( EnumFacing dir )
+    public static Direction rotateLeft( Direction dir )
     {
-        if( dir.getAxis() != EnumFacing.Axis.Y )
+        if( dir.getAxis() != Direction.Axis.Y )
         {
             return dir.rotateYCCW();
         }
@@ -37,9 +37,9 @@ public class DirectionUtil
         }
     }
 
-    public static EnumFacing rotate180( EnumFacing dir )
+    public static Direction rotate180( Direction dir )
     {
-        if( dir.getAxis() != EnumFacing.Axis.Y )
+        if( dir.getAxis() != Direction.Axis.Y )
         {
             return dir.getOpposite();
         }
@@ -49,17 +49,17 @@ public class DirectionUtil
         }
     }
 
-    public static int toLocal( IDirectionalTile directional, EnumFacing dir )
+    public static int toLocal( IDirectionalTile directional, Direction dir )
     {
-        EnumFacing front = directional.getDirection();
-        if( front.getAxis() == EnumFacing.Axis.Y )
+        Direction front = directional.getDirection();
+        if( front.getAxis() == Direction.Axis.Y )
         {
-            front = EnumFacing.NORTH;
+            front = Direction.NORTH;
         }
 
-        EnumFacing back = rotate180( front );
-        EnumFacing left = rotateLeft( front );
-        EnumFacing right = rotateRight( front );
+        Direction back = rotate180( front );
+        Direction left = rotateLeft( front );
+        Direction right = rotateRight( front );
         if( dir == front )
         {
             return 3;
@@ -76,7 +76,7 @@ public class DirectionUtil
         {
             return 4;
         }
-        else if( dir == EnumFacing.UP )
+        else if( dir == Direction.UP )
         {
             return 1;
         }
@@ -86,19 +86,19 @@ public class DirectionUtil
         }
     }
 
-    public static EnumFacing fromEntityRot( EntityLivingBase player )
+    public static Direction fromEntityRot( LivingEntity player )
     {
         int rot = MathHelper.floor( ( player.rotationYaw / 90.0f ) + 0.5f ) & 0x3;
         switch( rot ) {
-            case 0: return EnumFacing.NORTH;
-            case 1: return EnumFacing.EAST;
-            case 2: return EnumFacing.SOUTH;
-            case 3: return EnumFacing.WEST;
+            case 0: return Direction.NORTH;
+            case 1: return Direction.EAST;
+            case 2: return Direction.SOUTH;
+            case 3: return Direction.WEST;
         }
-        return EnumFacing.NORTH;
+        return Direction.NORTH;
     }
 
-    public static float toYawAngle( EnumFacing dir )
+    public static float toYawAngle( Direction dir )
     {
         switch( dir )
         {
@@ -110,7 +110,7 @@ public class DirectionUtil
         }
     }
 
-    public static float toPitchAngle( EnumFacing dir )
+    public static float toPitchAngle( Direction dir )
     {
         switch( dir )
         {

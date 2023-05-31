@@ -9,7 +9,7 @@ package dan200.computercraft.shared.common;
 import net.minecraft.block.material.Material;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.util.Direction;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
@@ -20,7 +20,7 @@ public abstract class BlockDirectional extends BlockGeneric
         super( material );
     }
 
-    public EnumFacing getDirection( IBlockAccess world, BlockPos pos )
+    public Direction getDirection( IBlockAccess world, BlockPos pos )
     {
         TileEntity tile = world.getTileEntity( pos );
         if( tile != null && tile instanceof IDirectionalTile )
@@ -28,10 +28,10 @@ public abstract class BlockDirectional extends BlockGeneric
             IDirectionalTile directional = (IDirectionalTile)tile;
             return directional.getDirection();
         }
-        return EnumFacing.NORTH;
+        return Direction.NORTH;
     }
 
-    public void setDirection( World world, BlockPos pos, EnumFacing dir )
+    public void setDirection( World world, BlockPos pos, Direction dir )
     {
         TileEntity tile = world.getTileEntity( pos );
         if( tile != null && tile instanceof IDirectionalTile )

@@ -11,11 +11,11 @@ import dan200.computercraft.shared.computer.apis.CommandAPI;
 import dan200.computercraft.shared.computer.core.IComputer;
 import dan200.computercraft.shared.computer.core.ServerComputer;
 import io.netty.buffer.ByteBuf;
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.BlockState;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.tileentity.CommandBlockBaseLogic;
+import net.minecraft.tileentity.CommandBlockLogic;
 import net.minecraft.util.math.*;
 import net.minecraft.util.text.*;
 import net.minecraft.util.*;
@@ -27,7 +27,7 @@ import java.util.Map;
 
 public class TileCommandComputer extends TileComputer
 {
-    public class CommandSender extends CommandBlockBaseLogic
+    public class CommandSender extends CommandBlockLogic
     {
         private Map<Integer, String> m_outputTable;
 
@@ -63,10 +63,10 @@ public class TileCommandComputer extends TileComputer
                 String label = computer.getLabel();
                 if( label != null )
                 {
-                    return new TextComponentString( computer.getLabel() );
+                    return new StringTextComponent( computer.getLabel() );
                 }
             }
-            return new TextComponentString( "@" );
+            return new StringTextComponent( "@" );
         }
 
         @Override
@@ -143,18 +143,18 @@ public class TileCommandComputer extends TileComputer
     }
 
     @Override
-    public EnumFacing getDirection()
+    public Direction getDirection()
     {
-        IBlockState state = getBlockState();
+        BlockState state = getBlockState();
         return state.getValue( BlockCommandComputer.Properties.FACING );
     }
 
     @Override
-    public void setDirection( EnumFacing dir )
+    public void setDirection( Direction dir )
     {
-        if( dir.getAxis() == EnumFacing.Axis.Y )
+        if( dir.getAxis() == Direction.Axis.Y )
         {
-            dir = EnumFacing.NORTH;
+            dir = Direction.NORTH;
         }
         setBlockState( getBlockState().withProperty( BlockCommandComputer.Properties.FACING, dir ) );
         updateInput();
@@ -174,12 +174,12 @@ public class TileCommandComputer extends TileComputer
     }
 
     @Override
-    public boolean isUsable( EntityPlayer player, boolean ignoreRange )
+    public boolean isUsable( PlayerEntity player, boolean ignoreRange )
     {
         MinecraftServer server = player.getServer();
         if( server == null || !server.isCommandBlockEnabled() )
         {
-            player.sendMessage( new TextComponentTranslation( "advMode.notEnabled" ) );
+            player.sendMessage( new TranslationTextComponent( "advMode.notEnabled" ) );
             return false;
         }
         else if( ComputerCraft.canPlayerUseCommands( player ) && player.capabilities.isCreativeMode )
@@ -188,7 +188,7 @@ public class TileCommandComputer extends TileComputer
         }
         else
         {
-            player.sendMessage( new TextComponentTranslation( "advMode.notAllowed" ) );
+            player.sendMessage( new TranslationTextComponent( "advMode.notAllowed" ) );
             return false;
         }
     }

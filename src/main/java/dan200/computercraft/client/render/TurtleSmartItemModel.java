@@ -13,15 +13,15 @@ import dan200.computercraft.shared.computer.core.ComputerFamily;
 import dan200.computercraft.shared.turtle.items.ItemTurtleBase;
 import dan200.computercraft.shared.util.Holiday;
 import dan200.computercraft.shared.util.HolidayUtil;
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.BlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.block.model.*;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.resources.IResourceManager;
 import net.minecraft.client.resources.IResourceManagerReloadListener;
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.util.Direction;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import org.apache.commons.lang3.tuple.Pair;
@@ -102,7 +102,7 @@ public class TurtleSmartItemModel implements IBakedModel, IResourceManagerReload
         {
             @Nonnull
             @Override
-            public IBakedModel handleItemState( @Nonnull IBakedModel originalModel, @Nonnull ItemStack stack, @Nullable World world, @Nullable EntityLivingBase entity)
+            public IBakedModel handleItemState( @Nonnull IBakedModel originalModel, @Nonnull ItemStack stack, @Nullable World world, @Nullable LivingEntity entity)
             {
                 ItemTurtleBase turtle = (ItemTurtleBase) stack.getItem();
                 ComputerFamily family = turtle.getFamily( stack );
@@ -175,7 +175,7 @@ public class TurtleSmartItemModel implements IBakedModel, IResourceManagerReload
 
     @Nonnull
     @Override
-    public List<BakedQuad> getQuads( IBlockState state, EnumFacing facing, long rand )
+    public List<BakedQuad> getQuads( BlockState state, Direction facing, long rand )
     {
         return getDefaultModel().getQuads( state, facing, rand );
     }

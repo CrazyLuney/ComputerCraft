@@ -10,8 +10,8 @@ import dan200.computercraft.shared.media.items.ItemDiskLegacy;
 import dan200.computercraft.shared.util.Colour;
 import dan200.computercraft.shared.util.ColourTracker;
 import dan200.computercraft.shared.util.ColourUtils;
-import net.minecraft.init.Items;
-import net.minecraft.inventory.InventoryCrafting;
+import net.minecraft.item.Items;
+import net.minecraft.inventory.CraftingInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.util.NonNullList;
@@ -24,7 +24,7 @@ import javax.annotation.Nonnull;
 public class DiskRecipe extends IForgeRegistryEntry.Impl<IRecipe> implements IRecipe
 {
     @Override
-    public boolean matches( @Nonnull InventoryCrafting inv, @Nonnull World world )
+    public boolean matches( @Nonnull CraftingInventory inv, @Nonnull World world )
     {
         boolean paperFound = false;
         boolean redstoneFound = false;
@@ -57,7 +57,7 @@ public class DiskRecipe extends IForgeRegistryEntry.Impl<IRecipe> implements IRe
 
     @Nonnull
     @Override
-    public ItemStack getCraftingResult( @Nonnull InventoryCrafting inv )
+    public ItemStack getCraftingResult( @Nonnull CraftingInventory inv )
     {
         ColourTracker tracker = new ColourTracker();
 
@@ -101,7 +101,7 @@ public class DiskRecipe extends IForgeRegistryEntry.Impl<IRecipe> implements IRe
 
     @Nonnull
     @Override
-    public NonNullList<ItemStack> getRemainingItems( @Nonnull InventoryCrafting inventoryCrafting )
+    public NonNullList<ItemStack> getRemainingItems( @Nonnull CraftingInventory inventoryCrafting )
     {
         NonNullList<ItemStack> results = NonNullList.withSize( inventoryCrafting.getSizeInventory(), ItemStack.EMPTY );
         for( int i = 0; i < results.size(); ++i )

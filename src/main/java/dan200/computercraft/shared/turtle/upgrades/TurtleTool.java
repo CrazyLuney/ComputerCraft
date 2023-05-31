@@ -15,24 +15,24 @@ import dan200.computercraft.shared.turtle.core.TurtlePlayer;
 import dan200.computercraft.shared.util.InventoryUtil;
 import dan200.computercraft.shared.util.WorldUtil;
 import net.minecraft.block.Block;
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.BlockState;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.block.model.IBakedModel;
+import net.minecraft.client.renderer.model.IBakedModel;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.SharedMonsterAttributes;
-import net.minecraft.entity.item.EntityArmorStand;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Blocks;
+import net.minecraft.entity.item.ArmorStandEntity;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.block.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.DamageSource;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.util.Direction;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
-import net.minecraft.world.WorldServer;
+import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.ForgeEventFactory;
@@ -122,7 +122,7 @@ public class TurtleTool implements ITurtleUpgrade
 
     @Nonnull
     @Override
-    public TurtleCommandResult useTool( @Nonnull ITurtleAccess turtle, @Nonnull TurtleSide side, @Nonnull TurtleVerb verb, @Nonnull EnumFacing direction )
+    public TurtleCommandResult useTool( @Nonnull ITurtleAccess turtle, @Nonnull TurtleSide side, @Nonnull TurtleVerb verb, @Nonnull Direction direction )
     {
         switch( verb )
         {
@@ -143,7 +143,7 @@ public class TurtleTool implements ITurtleUpgrade
 
     protected boolean canBreakBlock( World world, BlockPos pos )
     {
-        IBlockState state = world.getBlockState( pos );
+        BlockState state = world.getBlockState( pos );
         Block block = state.getBlock();
         return !block.isAir( state, world, pos ) && block != Blocks.BEDROCK && state.getBlockHardness( world, pos ) > -1.0F;
     }
@@ -151,7 +151,7 @@ public class TurtleTool implements ITurtleUpgrade
     protected boolean canHarvestBlock( World world, BlockPos pos )
     {
         Block block = world.getBlockState( pos ).getBlock();
-        TurtlePlayer turtlePlayer = new TurtlePlayer( (WorldServer)world );
+        TurtlePlayer turtlePlayer = new TurtlePlayer( (ServerWorld)world );
         turtlePlayer.loadInventory( m_item.copy() );
         return ForgeHooks.canHarvestBlock( block, turtlePlayer, world, pos );
     }
@@ -161,7 +161,7 @@ public class TurtleTool implements ITurtleUpgrade
         return 3.0f;
     }
     
-    private TurtleCommandResult attack( final ITurtleAccess turtle, EnumFacing direction )
+    private TurtleCommandResult attack( final ITurtleAccess turtle, Direction direction )
     {
         // Create a fake player, and orient it appropriately
         final World world = turtle.getWorld();
@@ -199,7 +199,7 @@ public class TurtleTool implements ITurtleUpgrade
                 if( damage > 0.0f )
                 {
                     DamageSource source = DamageSource.causePlayerDamage( turtlePlayer );
-                    if( hitEntity instanceof EntityArmorStand )
+                    if( hitEntity instanceof ArmorStandEntity )
                     {
                         // Special case for armor stands: attack twice to guarantee destroy
                         hitEntity.attackEntityFrom( source, damage );
@@ -233,7 +233,7 @@ public class TurtleTool implements ITurtleUpgrade
         return TurtleCommandResult.failure( "Nothing to attack here" );
     }
     
-    private TurtleCommandResult dig( ITurtleAccess turtle, EnumFacing direction )
+    private TurtleCommandResult dig( ITurtleAccess turtle, Direction direction )
     {
         // Get ready to dig
         World world = turtle.getWorld();
@@ -285,7 +285,7 @@ public class TurtleTool implements ITurtleUpgrade
             }
 
             // Destroy the block
-            IBlockState previousState = world.getBlockState( newPosition );
+            BlockState previousState = world.getBlockState( newPosition );
             world.playEvent(2001, newPosition, Block.getStateId(previousState));
             world.setBlockToAir( newPosition );
 
@@ -302,9 +302,9 @@ public class TurtleTool implements ITurtleUpgrade
         return TurtleCommandResult.failure( "Nothing to dig here" );
     }
 
-    private List<ItemStack> getBlockDropped( World world, BlockPos pos, EntityPlayer player )
+    private List<ItemStack> getBlockDropped( World world, BlockPos pos, PlayerEntity player )
     {
-        IBlockState state = world.getBlockState( pos );
+        BlockState state = world.getBlockState( pos );
         Block block = state.getBlock();
         NonNullList<ItemStack> drops = NonNullList.create();
         block.getDrops( drops, world, pos, world.getBlockState( pos ), 0 );

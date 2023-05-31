@@ -9,9 +9,9 @@ package dan200.computercraft.shared.computer.items;
 import dan200.computercraft.ComputerCraft;
 import dan200.computercraft.shared.computer.core.ComputerFamily;
 import net.minecraft.block.Block;
-import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.NonNullList;
 
 import javax.annotation.Nonnull;
@@ -42,7 +42,7 @@ public class ItemCommandComputer extends ItemComputer
 
         if( id >= 0 )
         {
-            NBTTagCompound nbt = new NBTTagCompound();
+            CompoundNBT nbt = new CompoundNBT();
             nbt.setInteger( "computerID", id );
             result.setTagCompound( nbt );
         }
@@ -56,7 +56,7 @@ public class ItemCommandComputer extends ItemComputer
     }
 
     @Override
-    public void getSubItems( @Nullable CreativeTabs tabs, @Nonnull NonNullList<ItemStack> list )
+    public void getSubItems( @Nullable ItemGroup tabs, @Nonnull NonNullList<ItemStack> list )
     {
         if( !isInCreativeTab( tabs ) ) return;
         list.add( ComputerItemFactory.create( -1, null, ComputerFamily.Command ) );
